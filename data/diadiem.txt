@@ -1,0 +1,3 @@
+DD01|Ha Noi|Thanh pho|VN
+DD02|TP. Ho Chi Minh|Thanh pho|VN
+DD03|Tokyo|Thanh pho|JP

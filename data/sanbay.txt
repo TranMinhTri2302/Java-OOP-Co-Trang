@@ -1,0 +1,3 @@
+HAN|San bay Noi Bai|DD01|Soc Son, Ha Noi|true
+SGN|San bay Tan Son Nhat|DD02|Tan Binh, TP.HCM|true
+NRT|San bay Narita|DD03|Narita, Chiba, Tokyo|true

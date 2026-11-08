@@ -1,0 +1,2 @@
+NV01|Nguyen Van An|15/05/1995|Nam|Ha Noi|0912345678|an.nv@flight.vn|Nhan vien ban ve|true|4|4|6150000.0
+NV02|Tran Thi Binh|20/09/1998|Nu|TP.HCM|0987654321|binh.tt@flight.vn|Nhan vien ban ve|true|0|0|0.0
