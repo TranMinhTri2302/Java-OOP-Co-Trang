@@ -45,6 +45,14 @@ public class QuanLyKhachHang {
         return "";
     }
 
+    public boolean suaKhachHang(String maKH, String tenMoi, String sdtMoi) {
+        KhachHang kh = timKhachHang(maKH);
+        if (kh == null) return false;
+        if (tenMoi != null && !tenMoi.isEmpty()) kh.setHoTen(tenMoi);
+        if (sdtMoi != null && !sdtMoi.isEmpty()) kh.setSoDienThoai(sdtMoi);
+        return true;
+    }
+
     // Rang buoc toan ven: khong duoc xoa khach hang da tung co hoa don hoac ve bay
     public boolean xoaKhachHang(String maKH, QuanLyHoaDon qlHD) {
         KhachHang kh = timKhachHang(maKH);
@@ -73,7 +81,7 @@ public class QuanLyKhachHang {
     }
 
     public void timKiem(String tuKhoa) {
-        System.out.println("\n---------------- TIM KIEM KHACH HANG: " + tuKhoa + " ----------------");
+        System.out.println("\n---------------- TIM KIEM NANG CAO (TEN HOAC MA KH): " + tuKhoa + " ----------------");
         int dem = 0;
         String tk = tuKhoa.toLowerCase();
         for (KhachHang kh : danhSachKhachHang) {
@@ -83,6 +91,25 @@ public class QuanLyKhachHang {
             }
         }
         if (dem == 0) System.out.println("Khong tim thay ket qua phu hop.");
+    }
+
+    // Tim kiem nang cao: loc khach hang co tong tien mua ve tu minTien tro len (vi du: tren 1.000.000 VND)
+    public ArrayList<KhachHang> timKhachHangTheoChiTieu(double minTien) {
+        ArrayList<KhachHang> kq = new ArrayList<KhachHang>();
+        for (KhachHang kh : danhSachKhachHang) {
+            if (kh.getTongTienDaMua() >= minTien) kq.add(kh);
+        }
+        return kq;
+    }
+
+    public void timKiemNangCaoTheoChiTieuConsole(double minTien) {
+        ArrayList<KhachHang> ds = timKhachHangTheoChiTieu(minTien);
+        System.out.printf("\n------- KHACH HANG CO CHI TIEU TU %,.0f VND TRO LEN (Tong: %d) -------%n", minTien, ds.size());
+        if (ds.isEmpty()) {
+            System.out.println("Khong co khach hang nao dat muc chi tieu nay.");
+            return;
+        }
+        for (KhachHang kh : ds) System.out.println(kh);
     }
 
     public KhachHang nhapKhachHangMoi() {
@@ -170,10 +197,28 @@ public class QuanLyKhachHang {
             int c = NhapLieu.nhapSoNguyen("Lua chon cua ban", 0, 5);
             if (c == 0) break;
             if (c == 1) hienThiDanhSach();
-            else if (c == 2) timKiem(NhapLieu.nhapChuoi("Nhap tu khoa tim kiem"));
+            else if (c == 2) menuTimKiemConsole();
             else if (c == 3) nhapKhachHangMoi();
             else if (c == 4) suaKhachHangConsole();
             else if (c == 5) xoaKhachHang(NhapLieu.nhapChuoi("Nhap ma can xoa"), qlHD);
+        }
+    }
+
+    private void menuTimKiemConsole() {
+        System.out.println("\n--- CHON HINH THUC TIM KIEM KHACH HANG ---");
+        System.out.println("1. Tim kiem co ban (theo ma KH)");
+        System.out.println("2. Tim kiem nang cao (theo ten hoac ma KH)");
+        System.out.println("3. Tim kiem nang cao (khach hang co tong hoa don/chi tieu tu X VND)");
+        int loai = NhapLieu.nhapSoNguyen("Lua chon cua ban", 1, 3);
+        if (loai == 1) {
+            String ma = NhapLieu.nhapChuoi("Nhap ma KH can tim");
+            KhachHang kh = timKhachHang(ma);
+            System.out.println(kh != null ? ("-> Ket qua: " + kh) : ("Khong tim thay khach hang co ma: " + ma));
+        } else if (loai == 2) {
+            timKiem(NhapLieu.nhapChuoi("Nhap tu khoa ten hoac ma KH"));
+        } else {
+            double min = NhapLieu.nhapSoThuc("Nhap so tien toi thieu (vi du: 1000000)", 0, 1000000000);
+            timKiemNangCaoTheoChiTieuConsole(min);
         }
     }
 

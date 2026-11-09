@@ -284,15 +284,21 @@ public class HeThong {
             System.out.println("1. Tra cuu chi tiet ve theo ma ve");
             System.out.println("2. Tra cuu hoa don theo ma hoa don");
             System.out.println("3. Tra cuu hoa don theo ma khach hang mua");
+            System.out.println("4. Tim kiem nang cao hoa don theo khoang tien");
             System.out.println("0. Quay lai menu chinh");
             System.out.println("==================================================");
-            int c = NhapLieu.nhapSoNguyen("Lua chon cua ban", 0, 3);
+            int c = NhapLieu.nhapSoNguyen("Lua chon cua ban", 0, 4);
             if (c == 0) break;
             if (c == 1) qlVe.traCuuChiTietVe(NhapLieu.nhapChuoi("Nhap ma ve"), qlHoaDon, qlKhachHang, qlChuyenBay);
             else if (c == 2) {
                 HoaDon hd = qlHoaDon.timHoaDon(NhapLieu.nhapChuoi("Nhap ma hoa don"));
                 System.out.println(hd != null ? hd : "Khong tim thay hoa don!");
             } else if (c == 3) qlHoaDon.traCuuTheoKhachMua(NhapLieu.nhapChuoi("Nhap ma khach hang"));
+            else if (c == 4) {
+                double min = NhapLieu.nhapSoThuc("Nhap so tien toi thieu (vi du: 1000000)", 0, 1000000000);
+                double max = NhapLieu.nhapSoThuc("Nhap so tien toi da (vi du: 100000000)", min, 1000000000);
+                qlHoaDon.traCuuTheoKhoangTienConsole(min, max);
+            }
         }
     }
 
@@ -324,36 +330,28 @@ public class HeThong {
             System.out.println("\n==================================================");
             System.out.println("                THONG KE & BAO CAO");
             System.out.println("==================================================");
-            System.out.println("1. Thong ke theo chuyen bay");
-            System.out.println("2. Thong ke theo khach hang mua ve");
-            System.out.println("3. Thong ke theo nhan vien lap hoa don");
-            System.out.println("4. Thong ke tong hop doanh thu (ThongKe interface)");
+            System.out.println("1. Thong ke doanh thu theo chuyen bay (san pham)");
+            System.out.println("2. Thong ke chi tiet hoa don & tong doanh thu (ThongKe)");
             System.out.println("0. Quay lai menu chinh");
             System.out.println("==================================================");
-            int c = NhapLieu.nhapSoNguyen("Lua chon cua ban", 0, 4);
+            int c = NhapLieu.nhapSoNguyen("Lua chon cua ban", 0, 2);
             if (c == 0) break;
             if (c == 1) {
-                System.out.println("\n================ THONG KE THEO CHUYEN BAY ================");
+                System.out.println("\n================ DOANH THU THEO CHUYEN BAY ================");
                 for (int i = 0; i < qlChuyenBay.getSoLuong(); i++) {
                     ChuyenBay cb = qlChuyenBay.getChuyenBay(i);
-                    System.out.printf("%-8s | %-20s | Ban: %-3d | Con: %-3d | Doanh thu: %,.0f VND%n",
+                    System.out.printf("%-8s | %-20s | Ban: %-2d | Con: %-2d | Doanh thu: %,.0f VND%n",
                             cb.getMaCB(), cb.getTenChuyenBay(), cb.getSoVeDaBan(), cb.getSoVeConLai(), cb.getTongDoanhThu());
                 }
             } else if (c == 2) {
-                System.out.println("\n================ THONG KE KHACH HANG MUA VE ================");
-                for (int i = 0; i < qlKhachHang.getSoLuong(); i++) {
-                    KhachHang kh = qlKhachHang.getKhachHang(i);
-                    System.out.printf("%-8s | %-20s | Ve: %-3d | Tien: %,.0f VND%n",
-                            kh.getMaKH(), kh.getHoTen(), kh.getTongSoVeDaMua(), kh.getTongTienDaMua());
-                }
-            } else if (c == 3) {
-                System.out.println("\n================ THONG KE NHAN VIEN LAP HOA DON ================");
+                qlHoaDon.thongKeChiTietHoaDon();
+                System.out.println("\n--- DOANH SO NHAN VIEN SALE ---");
                 for (int i = 0; i < qlNhanVien.getSoLuong(); i++) {
                     NhanVien nv = qlNhanVien.getNhanVien(i);
-                    System.out.printf("%-8s | %-20s | HD: %-3d | Ve: %-3d | Doanh so: %,.0f VND%n",
+                    System.out.printf("%-8s | %-20s | HD: %-2d | Ve: %-2d | Doanh so: %,.0f VND%n",
                             nv.getMaNV(), nv.getHoTen(), nv.getTongSoHoaDonDaLap(), nv.getTongSoVeDaBan(), nv.getTongTienDaBan());
                 }
-            } else if (c == 4) qlHoaDon.thongKeTongHopHoaDon();
+            }
         }
     }
 

@@ -4,6 +4,12 @@ import java.time.LocalDateTime;
 
 // Lop HoaDon implement interface ThongKe de thuc hien da hinh trong tinh toan doanh thu
 public class HoaDon implements ThongKe {
+    // Bien static va phuong thuc static dung chung cho toan bo he thong hoa don
+    public static final double TY_LE_VAT = 0.08;
+    public static String dinhDangTien(double tien) {
+        return String.format("%,.0f VND", tien);
+    }
+
     private String maHD;
     private String maKH;
     private String maNV;

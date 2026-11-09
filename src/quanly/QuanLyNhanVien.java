@@ -31,6 +31,14 @@ public class QuanLyNhanVien {
         return "";
     }
 
+    public boolean suaNhanVien(String maNV, String tenMoi, String sdtMoi) {
+        NhanVien nv = timNhanVien(maNV);
+        if (nv == null) return false;
+        if (tenMoi != null && !tenMoi.isEmpty()) nv.setHoTen(tenMoi);
+        if (sdtMoi != null && !sdtMoi.isEmpty()) nv.setSoDienThoai(sdtMoi);
+        return true;
+    }
+
     // Rang buoc toan ven: khong xoa nhan vien da tung lap hoa don trong he thong
     public boolean xoaNhanVien(String maNV, QuanLyHoaDon qlHD) {
         NhanVien nv = timNhanVien(maNV);

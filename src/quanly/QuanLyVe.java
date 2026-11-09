@@ -21,6 +21,20 @@ public class QuanLyVe {
         return null;
     }
 
+    public boolean xoaVe(String maVe) {
+        Ve v = timVe(maVe);
+        if (v == null) return false;
+        return danhSachVe.remove(v);
+    }
+
+    public boolean suaVe(String maVe, String hangVeMoi, double giaVeMoi) {
+        Ve v = timVe(maVe);
+        if (v == null) return false;
+        if (hangVeMoi != null && !hangVeMoi.isEmpty()) v.setHangVe(hangVeMoi);
+        if (giaVeMoi > 0) v.setGiaVe(giaVeMoi);
+        return true;
+    }
+
     public String sinhMaVe() {
         int max = 0;
         for (Ve v : danhSachVe) {

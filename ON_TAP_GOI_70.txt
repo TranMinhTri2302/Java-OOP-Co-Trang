@@ -1,0 +1,289 @@
+================================================================================
+                    TAI LIEU ON TAP GOI 70% (LIVE CODE 15 PHUT)
+         CONG THUC CHUNG -> CODE DAY DU CAC HAM -> GIAI THICH & TIPS LOGIC
+================================================================================
+
+CHU Y: 
+- Cac ham trong cung mot nhom duoc viet DONG BO GIONG NHAU 100% ve form code.
+- Chi can hoc thuoc Cong Thuc Chung o dau moi nhom la viet duoc toan bo cac ham ben duoi!
+
+
+================================================================================
+NHOM 1: CAC HAM THONG KE DOANH THU (QuanLyHoaDon.java)
+================================================================================
+
+* CONG THUC CHUNG (Hoc thuoc 4 dong nay):
+--------------------------------------------------
+double tong = 0;
+for (HoaDon hd : danhSachHoaDon) {
+    if ("HIEU_LUC".equalsIgnoreCase(hd.getTrangThai()) && DIEU_KIEN) {
+        tong += hd.getTongTien();
+    }
+}
+return tong;
+--------------------------------------------------
+
+* CODE DAY DU CAC HAM (Ap dung dung cong thuc tren):
+
+1. Ham tinh tong doanh thu toan he thong (Interface ThongKe & Da hinh):
+public double tinhTongDoanhThu() {
+    double tong = 0;
+    for (HoaDon hd : danhSachHoaDon) {
+        if ("HIEU_LUC".equalsIgnoreCase(hd.getTrangThai())) {
+            ThongKe tk = hd; // Da hinh Interface
+            tong += tk.tinhTongTien();
+        }
+    }
+    return tong;
+}
+
+2. Ham thong ke doanh thu theo Chuyen bay (tinhDoanhThuChuyenBay):
+public double tinhDoanhThuChuyenBay(String maCB) {
+    double tong = 0;
+    for (HoaDon hd : danhSachHoaDon) {
+        if ("HIEU_LUC".equalsIgnoreCase(hd.getTrangThai()) && hd.getMaCB().equalsIgnoreCase(maCB)) {
+            tong += hd.getTongTien();
+        }
+    }
+    return tong;
+}
+
+3. Ham thong ke doanh so Nhan vien Sale (tinhTienNhanVienBan):
+public double tinhTienNhanVienBan(String maNV) {
+    double tong = 0;
+    for (HoaDon hd : danhSachHoaDon) {
+        if ("HIEU_LUC".equalsIgnoreCase(hd.getTrangThai()) && hd.getMaNV().equalsIgnoreCase(maNV)) {
+            tong += hd.getTongTien();
+        }
+    }
+    return tong;
+}
+
+4. Ham thong ke tong tien 1 Khach hang da mua (tinhTienKhachMua):
+public double tinhTienKhachMua(String maKH) {
+    double tong = 0;
+    for (HoaDon hd : danhSachHoaDon) {
+        if ("HIEU_LUC".equalsIgnoreCase(hd.getTrangThai()) && hd.getMaKH().equalsIgnoreCase(maKH)) {
+            tong += hd.getTongTien();
+        }
+    }
+    return tong;
+}
+
+* GIAI THICH LOGIC & TIPS HOC THUOC:
+- Logic: Luon bat dau bang tong = 0, for duyet danhSachHoaDon, kiem tra HIEU_LUC roi cong don.
+- Tips: Ham 2, 3, 4 giong het nhau tung chu, chi thay:
+  + Chuyen bay: hd.getMaCB().equalsIgnoreCase(maCB)
+  + Nhan vien : hd.getMaNV().equalsIgnoreCase(maNV)
+  + Khach hang: hd.getMaKH().equalsIgnoreCase(maKH)
+- Rieng ham 1 (tong he thong): Bo so sanh ma, them bien "ThongKe tk = hd;" de an diem Da hinh.
+
+================================================================================
+NHOM 2: TIM KIEM NANG CAO & LOC DANH SACH (Tra ve ArrayList)
+================================================================================
+
+* CONG THUC CHUNG (Hoc thuoc 5 dong nay):
+--------------------------------------------------
+ArrayList<Kieu> kq = new ArrayList<Kieu>();
+for (Kieu x : danhSach) {
+    if (DIEU_KIEN) {
+        kq.add(x);
+    }
+}
+return kq;
+--------------------------------------------------
+
+* CODE DAY DU CAC HAM:
+
+5. Tim kiem nang cao hoa don theo khoang tien (timHoaDonTheoKhoangTien):
+public ArrayList<HoaDon> timHoaDonTheoKhoangTien(double min, double max) {
+    ArrayList<HoaDon> kq = new ArrayList<HoaDon>();
+    for (HoaDon hd : danhSachHoaDon) {
+        if (hd.getTongTien() >= min && hd.getTongTien() <= max && "HIEU_LUC".equalsIgnoreCase(hd.getTrangThai())) {
+            kq.add(hd);
+        }
+    }
+    return kq;
+}
+
+6. Tra cuu tat ca hoa don cua 1 khach hang (timHoaDonTheoKhach):
+public ArrayList<HoaDon> timHoaDonTheoKhach(String maKH) {
+    ArrayList<HoaDon> kq = new ArrayList<HoaDon>();
+    for (HoaDon hd : danhSachHoaDon) {
+        if (hd.getMaKH().equalsIgnoreCase(maKH)) {
+            kq.add(hd);
+        }
+    }
+    return kq;
+}
+
+7. Loc chuyen bay con ve theo tuyen di - den (layDanhSachChuyenBayKhaDung):
+public ArrayList<ChuyenBay> layDanhSachChuyenBayKhaDung(String sbDi, String sbDen) {
+    ArrayList<ChuyenBay> kq = new ArrayList<ChuyenBay>();
+    for (ChuyenBay cb : danhSachChuyenBay) {
+        if (cb.getMaSanBayDi().equalsIgnoreCase(sbDi) && cb.getMaSanBayDen().equalsIgnoreCase(sbDen)
+            && "MO_BAN".equalsIgnoreCase(cb.getTrangThai()) && cb.getSoVeConLai() > 0) {
+            kq.add(cb);
+        }
+    }
+    return kq;
+}
+
+* GIAI THICH LOGIC & TIPS HOC THUOC:
+- Logic: Luon tao ArrayList kq moi o dong 1, for duyet danh sach, if dung thi kq.add(), cuoi ham return kq.
+- Tips: Chi can nho cong thuc tren, co bao loc cai gi thi nhet dieu kien do vao trong if:
+  + Khoang tien : tongTien >= min && tongTien <= max
+  + Khach mua   : maKH bang nhau
+  + Chuyen bay  : san bay di, san bay den bang nhau va con ve (> 0).
+
+================================================================================
+NHOM 3: NGHIEP VU HOA DON & CAP NHAT SO VE (QuanLyHoaDon.java)
+================================================================================
+
+* CONG THUC CHUNG:
+--------------------------------------------------
+- Thao tac tren Hoa don (Lap HD hoac Huy HD) thi 2 dong cuoi BAT BUOC cap nhat so ghe chuyen bay:
+  cb.setSoVeDaBan(...)
+  cb.setSoVeConLai(cb.getTongSoVeMoBan() - cb.getSoVeDaBan())
+- Ban ve (Lap HD) : CONG so ve da ban (+ sl)
+- Huy ve (Huy HD) : TRU so ve da ban (- soVeHuy)
+--------------------------------------------------
+
+* CODE DAY DU CAC HAM:
+
+8. Ham Lap hoa don (lapHoaDon):
+public boolean lapHoaDon(String maHD, String maKH, String maNV, ChuyenBay cb, int sl) {
+    if (cb == null || cb.getSoVeConLai() < sl || timHoaDon(maHD) != null) return false;
+    double tien = cb.getGiaVeCoBan() * sl;
+    themHoaDon(new HoaDon(maHD, maKH, maNV, cb.getMaCB(), LocalDateTime.now(), sl, tien, "TIEN_MAT", "HIEU_LUC"));
+    cb.setSoVeDaBan(cb.getSoVeDaBan() + sl);                     // CONG VE BAN
+    cb.setSoVeConLai(cb.getTongSoVeMoBan() - cb.getSoVeDaBan()); // Tinh lai ve con
+    return true;
+}
+
+9. Ham Huy hoa don (huyHoaDon):
+public boolean huyHoaDon(String maHD, ChuyenBay cb) {
+    HoaDon hd = timHoaDon(maHD);
+    if (hd == null || !"HIEU_LUC".equalsIgnoreCase(hd.getTrangThai())) return false;
+    hd.setTrangThai("DA_HUY");
+    if (cb != null) {
+        cb.setSoVeDaBan(cb.getSoVeDaBan() - hd.getSoLuongVe());  // TRU VE BAN (hoan ve)
+        cb.setSoVeConLai(cb.getTongSoVeMoBan() - cb.getSoVeDaBan()); // Tinh lai ve con
+    }
+    return true;
+}
+
+* GIAI THICH LOGIC & TIPS HOC THUOC:
+- Buoc 1: Kiem tra if (dieu kien sai hoac null) -> return false.
+- Buoc 2: Xu ly hoa don (Lap: themHoaDon; Huy: hd.setTrangThai("DA_HUY")).
+- Buoc 3: Cap nhat so ghe (Lap thi + sl, Huy thi - soLuongVe). 2 dong cuoi cung giong het nhau!
+
+================================================================================
+NHOM 4: KIEM TRA DIEU KIEN BAY (Ke thua & Ghi de @Override)
+================================================================================
+
+* CONG THUC CHUNG:
+--------------------------------------------------
+@Override
+public String kiemTraDieuKien(KhachHang kh) {
+    if (kh == null) return "Khach hang khong ton tai!";
+    if (DIEU_KIEN_THIEU_GIAY_TO) return "Thieu giay to!";
+    return "";
+}
+--------------------------------------------------
+
+* CODE DAY DU CAC HAM:
+
+10. Trong ChuyenBayNoiDia.java (Kiem tra CCCD):
+@Override
+public String kiemTraDieuKien(KhachHang kh) {
+    if (kh == null) return "Khach hang khong ton tai!";
+    if (kh.getSoCCCD() == null || kh.getSoCCCD().trim().isEmpty()) {
+        return "Bay noi dia bat buoc phai co so CCCD!";
+    }
+    return "";
+}
+
+11. Trong ChuyenBayQuocTe.java (Kiem tra Ho chieu):
+@Override
+public String kiemTraDieuKien(KhachHang kh) {
+    if (kh == null) return "Khach hang khong ton tai!";
+    if (kh.getSoHoChieu() == null || kh.getSoHoChieu().trim().isEmpty()) {
+        return "Bay quoc te bat buoc phai co ho chieu!";
+    }
+    return "";
+}
+
+* GIAI THICH LOGIC & TIPS HOC THUOC:
+- Hai ham giong het nhau 95%.
+- Bay noi dia check: kh.getSoCCCD()
+- Bay quoc te check: kh.getSoHoChieu()
+
+================================================================================
+NHOM 5: CAC LOP & MAU KHAI BAO NGAN CON LAI (GOI 100)
+================================================================================
+
+12. Lop ChiTietHoaDon (ChiTietHoaDon.java):
+public class ChiTietHoaDon {
+    private String maHD, maVe;
+    private double donGiaVe;
+    private int soLuong;
+    private double thanhTien;
+
+    public ChiTietHoaDon(String maHD, String maVe, double donGiaVe, int soLuong) {
+        this.maHD = maHD;
+        this.maVe = maVe;
+        this.donGiaVe = donGiaVe;
+        this.soLuong = soLuong;
+        this.thanhTien = donGiaVe * soLuong; // Diem chot: thanhTien = donGia * sl
+    }
+}
+
+13. Interface ThongKe & HoaDon implements:
+public interface ThongKe {
+    double tinhTongTien();
+}
+
+public class HoaDon implements ThongKe {
+    private double tongTien;
+    @Override
+    public double tinhTongTien() {
+        return this.tongTien;
+    }
+}
+
+14. Lop truu tuong ChuyenBay (ChuyenBay.java):
+public abstract class ChuyenBay {
+    protected String maCB, tenChuyenBay;
+    public abstract String kiemTraDieuKien(KhachHang kh);
+}
+
+15. Chong trung lich bay (QuanLyChuyenBay.java):
+// Logic: startMoi < endCu && startCu < endMoi
+public boolean kiemTraTrungLich(String maMB, LocalDateTime startMoi, LocalDateTime endMoi) {
+    for (ChuyenBay cb : danhSachChuyenBay) {
+        if (cb.getMaMayBay().equalsIgnoreCase(maMB) && !"HUY".equalsIgnoreCase(cb.getTrangThai())) {
+            LocalDateTime start = LocalDateTime.of(cb.getNgayDi(), cb.getGioDi());
+            LocalDateTime end = LocalDateTime.of(cb.getNgayDen(), cb.getGioDen());
+            if (startMoi.isBefore(end) && start.isBefore(endMoi)) return true;
+        }
+    }
+    return false;
+}
+
+16. Rang buoc toan ven khi xoa chuyen bay:
+public boolean xoaChuyenBay(String maCB, QuanLyVe qlVe, QuanLyHoaDon qlHD) {
+    ChuyenBay cb = timChuyenBay(maCB);
+    if (cb == null || qlVe.kiemTraMaCBDaDung(maCB) || qlHD.kiemTraMaCBDaDung(maCB)) return false;
+    danhSachChuyenBay.remove(cb);
+    return true;
+}
+
+17. In bang chi tiet hoa don:
+public void inThongKeChiTiet() {
+    for (ChiTietHoaDon ct : danhSachChiTiet) {
+        System.out.println(ct);
+    }
+    System.out.println("Tong so chi tiet ve: " + danhSachChiTiet.size());
+}
+================================================================================

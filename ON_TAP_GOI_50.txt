@@ -1,0 +1,196 @@
+================================================================================
+           TAI LIEU ON TAP CAP TOC - GOI 50% DIEM (THI CODE TAI CHO 15 PHUT)
+================================================================================
+
+[LUC GIAO CHO NAY: DOC KY TRUOC KHI HOC]
+1. Trong 15 phut ngoi tren may, co giao se bat code 1 hoac 2 trong 3 lop Quan Ly:
+   - QuanLyKhachHang
+   - QuanLyNhanVien
+   - QuanLyVe (hoac QuanLyChuyenBay)
+2. Co se yeu cau: "Viet lop quan ly gom ArrayList va 4 ham: Tim kiem, Them, Xoa, Sua".
+3. TUYET DOI KHONG VIET SCANNER / SYSTEM.OUT / WHILE LOOP!
+   Co chi cham logic xu ly danh sach ArrayList. 
+   Moi ham CHI TU 3 DEN 5 DONG. Ca bai code chua toi 25 dong!
+4. Bi quyet: 3 lop nay co cong thuc giong nhau 100%. Chi can hoc 1 lop la viet duoc ca 3!
+
+--------------------------------------------------------------------------------
+I. CONG THUC "4 BUOC THANH CONG" (AP DUNG CHO MOI LOP)
+--------------------------------------------------------------------------------
+Moi lop quan ly luon bat dau bang 1 bien ArrayList:
+    private ArrayList<TenDoiTuong> danhSach = new ArrayList<TenDoiTuong>();
+
+Roi viet dung 4 ham theo thu tu logic sau:
+1. HAM TIM KIEM (Bat buoc phai viet dau tien vi cac ham sau deu dung den no)
+   - Duyet for-each qua danh sach.
+   - So sanh ma bang: .equalsIgnoreCase(maCanTim)
+   - Neu dung thi return doi tuong; het vong lap return null.
+
+2. HAM THEM (Goi ham tim kiem)
+   - Kiem tra: doi tuong == null hoac tim(...) != null thi return false (chong trung ma).
+   - Hop le thi: return danhSach.add(doiTuong);
+
+3. HAM XOA (Goi ham tim kiem)
+   - Tim doi tuong theo ma.
+   - Neu null return false; nguoc lai: return danhSach.remove(doiTuong);
+
+4. HAM SUA (Goi ham tim kiem)
+   - Tim doi tuong theo ma.
+   - Neu null return false.
+   - Dung cac ham set... de doi gia tri moi, cuoi cung return true.
+
+================================================================================
+II. CODE MAU CHINH XAC CUA 3 LOP (HOC THUOC DANG NAY)
+================================================================================
+
+--------------------------------------------------------------------------------
+1. LOP: QuanLyKhachHang (Quan trong nhat - De bi goi nhat)
+--------------------------------------------------------------------------------
+package quanly;
+
+import model.KhachHang;
+import java.util.ArrayList;
+
+public class QuanLyKhachHang {
+    private ArrayList<KhachHang> danhSachKhachHang = new ArrayList<KhachHang>();
+
+    // 1. Tim kiem theo ma KH (4 dong)
+    public KhachHang timKhachHang(String maKH) {
+        if (maKH == null) return null;
+        for (KhachHang kh : danhSachKhachHang) {
+            if (maKH.equalsIgnoreCase(kh.getMaKH())) return kh;
+        }
+        return null;
+    }
+
+    // 2. Them khach hang moi - co kiem tra trung ma (3 dong)
+    public boolean themKhachHang(KhachHang kh) {
+        if (kh == null || timKhachHang(kh.getMaKH()) != null) return false;
+        return danhSachKhachHang.add(kh);
+    }
+
+    // 3. Xoa khach hang theo ma (4 dong)
+    public boolean xoaKhachHang(String maKH) {
+        KhachHang kh = timKhachHang(maKH);
+        if (kh == null) return false;
+        return danhSachKhachHang.remove(kh);
+    }
+
+    // 4. Sua thong tin khach hang (6 dong)
+    public boolean suaKhachHang(String maKH, String tenMoi, String sdtMoi) {
+        KhachHang kh = timKhachHang(maKH);
+        if (kh == null) return false;
+        if (tenMoi != null && !tenMoi.isEmpty()) kh.setHoTen(tenMoi);
+        if (sdtMoi != null && !sdtMoi.isEmpty()) kh.setSoDienThoai(sdtMoi);
+        return true;
+    }
+}
+
+--------------------------------------------------------------------------------
+2. LOP: QuanLyNhanVien (Giong het lop tren, chi doi chu KhachHang -> NhanVien)
+--------------------------------------------------------------------------------
+package quanly;
+
+import model.NhanVien;
+import java.util.ArrayList;
+
+public class QuanLyNhanVien {
+    private ArrayList<NhanVien> danhSachNhanVien = new ArrayList<NhanVien>();
+
+    // 1. Tim kiem theo ma NV (4 dong)
+    public NhanVien timNhanVien(String maNV) {
+        if (maNV == null) return null;
+        for (NhanVien nv : danhSachNhanVien) {
+            if (maNV.equalsIgnoreCase(nv.getMaNV())) return nv;
+        }
+        return null;
+    }
+
+    // 2. Them nhan vien moi (3 dong)
+    public boolean themNhanVien(NhanVien nv) {
+        if (nv == null || timNhanVien(nv.getMaNV()) != null) return false;
+        return danhSachNhanVien.add(nv);
+    }
+
+    // 3. Xoa nhan vien theo ma (4 dong)
+    public boolean xoaNhanVien(String maNV) {
+        NhanVien nv = timNhanVien(maNV);
+        if (nv == null) return false;
+        return danhSachNhanVien.remove(nv);
+    }
+
+    // 4. Sua thong tin nhan vien (6 dong)
+    public boolean suaNhanVien(String maNV, String tenMoi, String sdtMoi) {
+        NhanVien nv = timNhanVien(maNV);
+        if (nv == null) return false;
+        if (tenMoi != null && !tenMoi.isEmpty()) nv.setHoTen(tenMoi);
+        if (sdtMoi != null && !sdtMoi.isEmpty()) nv.setSoDienThoai(sdtMoi);
+        return true;
+    }
+}
+
+--------------------------------------------------------------------------------
+3. LOP: QuanLyVe (Sieu ngan)
+--------------------------------------------------------------------------------
+package quanly;
+
+import model.Ve;
+import java.util.ArrayList;
+
+public class QuanLyVe {
+    private ArrayList<Ve> danhSachVe = new ArrayList<Ve>();
+
+    // 1. Tim ve theo ma Ve (4 dong)
+    public Ve timVe(String maVe) {
+        if (maVe == null) return null;
+        for (Ve v : danhSachVe) {
+            if (maVe.equalsIgnoreCase(v.getMaVe())) return v;
+        }
+        return null;
+    }
+
+    // 2. Them ve moi (3 dong)
+    public boolean themVe(Ve ve) {
+        if (ve == null || timVe(ve.getMaVe()) != null) return false;
+        return danhSachVe.add(ve);
+    }
+
+    // 3. Xoa ve theo ma (4 dong)
+    public boolean xoaVe(String maVe) {
+        Ve v = timVe(maVe);
+        if (v == null) return false;
+        return danhSachVe.remove(v);
+    }
+
+    // 4. Sua hang ve va gia ve (6 dong)
+    public boolean suaVe(String maVe, String hangVeMoi, double giaVeMoi) {
+        Ve v = timVe(maVe);
+        if (v == null) return false;
+        if (hangVeMoi != null && !hangVeMoi.isEmpty()) v.setHangVe(hangVeMoi);
+        if (giaVeMoi > 0) v.setGiaVe(giaVeMoi);
+        return true;
+    }
+}
+
+================================================================================
+III. TIPS LAM BAI TRONG 15 PHUT DE KHONG BI DIEM 0
+================================================================================
+1. Chien thuat go code:
+   - Vao phong may, mo IDE (hoac Notepad tuy co bat), go ngay dong khai bao ArrayList.
+   - Go ham TIM KIEM dau tien. Vi ham nay la chia khoa de 3 ham Them, Xoa, Sua goi toi.
+   - Khi viet ham XOA hoac SUA, luon goi ham TIM KIEM o dong dau tien:
+       KhachHang kh = timKhachHang(maKH);
+       if (kh == null) return false;
+   - Cu phap so sanh chuoi: Nho ky la dung .equalsIgnoreCase(...) chu KHONG DUOC dung dau "==".
+
+2. Neu bi quen ten thuoc tinh (vi du khong nho getSoDienThoai hay getSDT):
+   - Nhin sang file Model (KhachHang.java hoac NhanVien.java) xem ten getter/setter.
+   - Hoac chi can sua hoTen: kh.setHoTen(tenMoi); la co giao da cham dat yeu cau roi!
+
+3. Cach luyen tap tai nha truoc khi thi (chi mat 20 phut):
+   - Mo mot file trong hoac to giay trang.
+   - Tu tay go/chep lai class QuanLyKhachHang dung 3 lan.
+   - Lan 1: Vua nhin file mau vua go.
+   - Lan 2: Co nho tu go, bi cho nao thi liec nhin mau.
+   - Lan 3: Tu go hoan toan khong nhin mau.
+   Lam duoc lan 3 la chac chan 100% qua mon Goi 50%!
+================================================================================

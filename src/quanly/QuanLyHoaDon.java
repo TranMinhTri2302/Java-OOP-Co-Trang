@@ -112,19 +112,52 @@ public class QuanLyHoaDon {
         return t;
     }
 
-    // Tinh tong hop doanh thu thuc te su dung interface ThongKe de the hien tinh da hinh
-    public void thongKeTongHopHoaDon() {
-        int demHieuLuc = 0; double tongTien = 0;
+    // Thong ke chi tiet hoa don va tong doanh thu thuc te su dung interface ThongKe
+    public void thongKeChiTietHoaDon() {
+        System.out.println("\n================ DANH SACH CHI TIET CAC HOA DON ================");
+        if (danhSachChiTiet.isEmpty()) {
+            System.out.println("Chua co chi tiet hoa don nao.");
+        } else {
+            for (int i = 0; i < danhSachChiTiet.size(); i++) {
+                System.out.printf("[%d] %s%n", (i + 1), danhSachChiTiet.get(i));
+            }
+        }
+        int demHieuLuc = 0; double tongTien = 0; int tongVe = 0;
         for (HoaDon hd : danhSachHoaDon) {
-            if ("HIEU_LUC".equalsIgnoreCase(hd.getTrangThai())) demHieuLuc++;
+            if ("HIEU_LUC".equalsIgnoreCase(hd.getTrangThai())) {
+                demHieuLuc++;
+                tongVe += hd.getSoLuongVe();
+            }
             // Ap dung da hinh (Polymorphism): bien kieu interface ThongKe tro toi doi tuong HoaDon
             ThongKe tk = hd;
             tongTien += tk.tinhTongTien();
         }
-        System.out.println("\n================ THONG KE TONG HOP HOA DON ================");
-        System.out.printf("Tong so hoa don con hieu luc : %d%n", demHieuLuc);
-        System.out.printf("Tong doanh thu thuc te       : %,.0f VND%n", tongTien);
-        System.out.println("===========================================================");
+        System.out.println("--------------------------------------------------------------------------------------------------");
+        System.out.printf("Tong so hoa don hieu luc  : %d%n", demHieuLuc);
+        System.out.printf("Tong so ve / chi tiet     : %d ve%n", tongVe);
+        System.out.printf("Tong doanh thu thuc te    : %,.0f VND (tinh qua interface ThongKe)%n", tongTien);
+        System.out.println("==================================================================================================");
+    }
+
+    // Tim kiem nang cao: loc hoa don theo khoang tien (vi du: tren 1.000.000 VND)
+    public ArrayList<HoaDon> timHoaDonTheoKhoangTien(double minTien, double maxTien) {
+        ArrayList<HoaDon> kq = new ArrayList<HoaDon>();
+        for (HoaDon hd : danhSachHoaDon) {
+            if (hd.getTongTien() >= minTien && hd.getTongTien() <= maxTien && "HIEU_LUC".equalsIgnoreCase(hd.getTrangThai())) {
+                kq.add(hd);
+            }
+        }
+        return kq;
+    }
+
+    public void traCuuTheoKhoangTienConsole(double minTien, double maxTien) {
+        ArrayList<HoaDon> ds = timHoaDonTheoKhoangTien(minTien, maxTien);
+        System.out.printf("\n------- DANH SACH HOA DON TU %,.0f VND DEN %,.0f VND (Tong: %d) -------%n", minTien, maxTien, ds.size());
+        if (ds.isEmpty()) {
+            System.out.println("Khong co hoa don nao phu hop.");
+            return;
+        }
+        for (HoaDon hd : ds) System.out.println(hd);
     }
 
     public void traCuuTheoKhachMua(String maKH) {
@@ -132,6 +165,16 @@ public class QuanLyHoaDon {
         int dem = 0;
         for (HoaDon hd : danhSachHoaDon) if (hd.getMaKH().equalsIgnoreCase(maKH)) { System.out.println(hd); dem++; }
         if (dem == 0) System.out.println("Khong tim thay hoa don nao.");
+    }
+
+    // Ham lap hoa don cot loi danh cho live-code (dung 7 dong)
+    public boolean lapHoaDon(String maHD, String maKH, String maNV, ChuyenBay cb, int sl) {
+        if (cb == null || cb.getSoVeConLai() < sl || timHoaDon(maHD) != null) return false;
+        double tien = cb.getGiaVeCoBan() * sl;
+        themHoaDon(new HoaDon(maHD, maKH, maNV, cb.getMaCB(), LocalDateTime.now(), sl, tien, "TIEN_MAT", "HIEU_LUC"));
+        cb.setSoVeDaBan(cb.getSoVeDaBan() + sl);
+        cb.setSoVeConLai(cb.getTongSoVeMoBan() - cb.getSoVeDaBan());
+        return true;
     }
 
     // Menu them 1 hoa don moi viet truc tiep trong class QuanLyHoaDon theo dung yeu cau:
