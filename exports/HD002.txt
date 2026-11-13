@@ -1,0 +1,26 @@
+========================================================================
+                           HOA DON BAN VE MAY BAY                       
+========================================================================
+Ma hoa don     : HD002
+Ngay lap       : 01/11/2026 22:56
+Trang thai     : HIEU_LUC
+Hinh thuc TT   : TIEN_MAT
+------------------------------------------------------------------------
+THONG TIN NGUOI MUA:
+  Ma KH: KH01 | Ho ten: Pham Quoc Cuong | SDT: 0901234567 | Email: cuong.pq@gmail.com
+------------------------------------------------------------------------
+THONG TIN NHAN VIEN LAP:
+  Ma NV: NV01 - Nguyen Van An (Nhan vien ban ve)
+------------------------------------------------------------------------
+THONG TIN CHUYEN BAY:
+  Ma CB: VN123 - Ha Noi - TP.HCM (NOI_DIA)
+  Hanh trinh: HAN -> SGN | Thoi gian: 28/11/2026 08:00 -> 28/11/2026 10:15
+------------------------------------------------------------------------
+DANH SACH VE BAY:
+STT  | Ma ve      | Nguoi bay            | Ghe    | Hang ve      | Gia ve
+------------------------------------------------------------------------
+1    | VE002      | Pham Quoc Cuong      | 1A     | THUONG_GIA   | 1.500.000 VND
+========================================================================
+TONG CONG: 1 ve  |  TONG TIEN: 1.500.000 VND
+========================================================================
+Ghi chu: Day la hoa don mo phong, khong phai hoa don dien tu phap ly.

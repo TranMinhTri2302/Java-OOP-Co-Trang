@@ -1,3 +1,8 @@
 DD01|Ha Noi|Thanh pho|VN
 DD02|TP. Ho Chi Minh|Thanh pho|VN
-DD03|Tokyo|Thanh pho|JP
+DD03|Da Nang|Thanh pho|VN
+DD04|Phu Quoc|Thanh pho|VN
+DD05|Tokyo|Thanh pho|JP
+DD06|Seoul|Thanh pho|KR
+DD07|Singapore|Thanh pho|SG
+DD08|Bangkok|Thanh pho|TH

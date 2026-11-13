@@ -1,2 +1,10 @@
-NV01|Nguyen Van An|15/05/1995|Nam|Ha Noi|0912345678|an.nv@flight.vn|Nhan vien ban ve|true|3|3|4500000.0
-NV02|Tran Thi Binh|20/09/1998|Nu|TP.HCM|0987654321|binh.tt@flight.vn|Nhan vien ban ve|true|0|0|0.0
+NV01|Nguyen Van An|15/05/1995|Nam|Ha Noi|0912345671|an.nv@flight.vn|Nhan vien ban ve|true|7|7|2.19E7
+NV02|Tran Thi Binh|20/09/1998|Nu|TP.HCM|0987654322|binh.tt@flight.vn|Nhan vien ban ve|true|2|2|6300000.0
+NV03|Le Van Cuong|10/03/1993|Nam|Da Nang|0934567833|cuong.lv@flight.vn|Nhan vien ban ve|true|2|4|9700000.0
+NV04|Pham Thi Dung|25/07/1996|Nu|Ha Noi|0978123444|dung.pt@flight.vn|Nhan vien ban ve|true|2|1|8500000.0
+NV05|Hoang Van Em|12/11/1994|Nam|TP.HCM|0909876555|em.hv@flight.vn|Nhan vien ban ve|true|2|4|6400000.0
+NV06|Vo Thi Giang|18/04/1997|Nu|Hai Phong|0911223366|giang.vt@flight.vn|Nhan vien ban ve|true|2|2|2750000.0
+NV07|Dang Van Hai|30/08/1992|Nam|Can Tho|0944556677|hai.dv@flight.vn|Nhan vien ban ve|true|2|4|4900000.0
+NV08|Bui Thi Huong|05/12/1999|Nu|Ha Noi|0966778888|huong.bt@flight.vn|Nhan vien ban ve|true|2|2|8450000.0
+NV09|Do Van Khanh|22/02/1991|Nam|TP.HCM|0922334499|khanh.dv@flight.vn|Nhan vien ban ve|true|2|4|1.18E7
+NV10|Ngo Thi Lan|14/06/1995|Nu|Nha Trang|0955667700|lan.nt@flight.vn|Nhan vien ban ve|true|2|5|1.39E7

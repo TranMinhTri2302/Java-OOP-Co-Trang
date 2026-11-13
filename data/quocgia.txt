@@ -1,2 +1,5 @@
 VN|Viet Nam
 JP|Nhat Ban
+KR|Han Quoc
+SG|Singapore
+TH|Thai Lan

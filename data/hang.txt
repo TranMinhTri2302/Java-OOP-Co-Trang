@@ -1,1 +1,3 @@
 VN|Vietnam Airlines|19001100|contact@vietnamairlines.com|true
+VJ|Vietjet Air|19001886|19001886@vietjetair.com|true
+QH|Bamboo Airways|19001166|19001166@bambooairways.com|true

@@ -1,3 +1,8 @@
 HAN|San bay Noi Bai|DD01|Soc Son, Ha Noi|true
 SGN|San bay Tan Son Nhat|DD02|Tan Binh, TP.HCM|true
-NRT|San bay Narita|DD03|Narita, Chiba, Tokyo|true
+DAD|San bay Da Nang|DD03|Hai Chau, Da Nang|true
+PQC|San bay Phu Quoc|DD04|Phu Quoc, Kien Giang|true
+NRT|San bay Narita|DD05|Narita, Chiba, Tokyo|true
+ICN|San bay Incheon|DD06|Incheon, Seoul|true
+SIN|San bay Changi|DD07|Changi, Singapore|true
+BKK|San bay Suvarnabhumi|DD08|Bang Phli, Bangkok|true
