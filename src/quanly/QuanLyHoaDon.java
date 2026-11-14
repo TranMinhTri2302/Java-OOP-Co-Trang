@@ -220,6 +220,7 @@ public class QuanLyHoaDon {
 
         // 4. Gan tong tien = 0 (bien cuc bo)
         double tongTien = 0.0;
+        int tongSoVe = 0;
 
         // 5. Roi moi hoi la nhap so luong chi tiet hoa don (bien cuc bo)
         int soLuongChiTiet = NhapLieu.nhapSoNguyen("Nhap so luong chi tiet hoa don", 1, 50);
@@ -237,6 +238,7 @@ public class QuanLyHoaDon {
             maCBLuu = sp.getMaCB();
 
             int soLuong = NhapLieu.nhapSoNguyen("Nhap so luong", 1, sp.getSoVeConLai());
+            tongSoVe += soLuong;
 
             // getDonGia tu danh sach san pham (QuanLyChuyenBay)
             double donGia = sp.getGiaVeCoBan();
@@ -261,10 +263,10 @@ public class QuanLyHoaDon {
         }
 
         // Them hoa don vao danhSachHoaDon
-        this.themHoaDon(new HoaDon(maHD, maKH, maNV, maCBLuu, ngayLap, soLuongChiTiet, tongTien, "TIEN_MAT", "HIEU_LUC"));
+        this.themHoaDon(new HoaDon(maHD, maKH, maNV, maCBLuu, ngayLap, tongSoVe, tongTien, "TIEN_MAT", "HIEU_LUC"));
         System.out.println("\nTHEM HOA DON THEO MAU THANH CONG!");
-        System.out.printf("Ma HD: %s | Ma KH: %s | NV: %s | So luong chi tiet: %d | Tong tien: %,.0f VND%n",
-                maHD, maKH, nv.getHoTen(), soLuongChiTiet, tongTien);
+        System.out.printf("Ma HD: %s | Ma KH: %s | NV: %s | So luong chi tiet: %d | Tong so ve: %d | Tong tien: %,.0f VND%n",
+                maHD, maKH, nv.getHoTen(), soLuongChiTiet, tongSoVe, tongTien);
         return true;
     }
 

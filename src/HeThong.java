@@ -104,11 +104,11 @@ public class HeThong {
         System.out.println("\n==================================================");
         System.out.println("            QUY TRINH DAT VE CHUYEN BAY");
         System.out.println("==================================================");
-        SanBay sbDi = chonSanBayTungBuoc("xuat phat");
+        SanBay sbDi = qlDanhMuc.chonSanBayTungBuoc("xuat phat");
         if (sbDi == null) return;
         SanBay sbDen;
         while (true) {
-            sbDen = chonSanBayTungBuoc("ha canh");
+            sbDen = qlDanhMuc.chonSanBayTungBuoc("ha canh");
             if (sbDen == null) return;
             if (!sbDen.getMaSanBay().equalsIgnoreCase(sbDi.getMaSanBay())) break;
             System.out.println("Loi: San bay den khong duoc trung san bay di!");
@@ -133,28 +133,28 @@ public class HeThong {
         boolean nguoiMuaCoBay = NhapLieu.nhapXacNhan("Nguoi mua (" + buyer.getHoTen() + ") co truc tiep bay tren chuyen nay khong?");
         if (nguoiMuaCoBay) {
             if (qlVe.kiemTraKhachDaCoVeChuyenBay(buyer.getMaKH(), cb.getMaCB(), qlHoaDon)) {
-                System.out.println("Loi: Nguoi mua da co ve HIEU_LUC tren chuyen bay nay!");
-                return;
-            }
-            String err = cb.kiemTraDieuKien(buyer);
-            if (!err.isEmpty()) {
-                System.out.println("Nguoi mua khong du dieu kien bay: " + err);
-                return;
-            }
-            dsKhachBay[0] = buyer;
-            System.out.println("\n---------------- VE THU 1 / " + n + " (Nguoi bay: " + buyer.getHoTen() + ") ----------------");
-            System.out.println("Chon loai ve cho " + buyer.getHoTen() + ":");
-            System.out.println("1. Nguoi lon (THUONG)");
-            System.out.println("2. Tre em (TRE_EM)");
-            int cLoai = NhapLieu.nhapSoNguyen("Lua chon cua ban", 1, 2);
-            dsLoaiVe[0] = (cLoai == 2) ? "TRE_EM" : "THUONG";
+                System.out.println("Loi: Nguoi mua da co ve HIEU_LUC tren chuyen bay nay! Chuyen sang chon nguoi bay khac.");
+            } else {
+                String err = cb.kiemTraDieuKien(buyer);
+                if (!err.isEmpty()) {
+                    System.out.println("Nguoi mua khong du dieu kien bay: " + err + ". Chuyen sang chon nguoi bay khac.");
+                } else {
+                    dsKhachBay[0] = buyer;
+                    System.out.println("\n---------------- VE THU 1 / " + n + " (Nguoi bay: " + buyer.getHoTen() + ") ----------------");
+                    System.out.println("Chon loai ve cho " + buyer.getHoTen() + ":");
+                    System.out.println("1. Nguoi lon (THUONG)");
+                    System.out.println("2. Tre em (TRE_EM)");
+                    int cLoai = NhapLieu.nhapSoNguyen("Lua chon cua ban", 1, 2);
+                    dsLoaiVe[0] = (cLoai == 2) ? "TRE_EM" : "THUONG";
 
-            String ghe = qlVe.chonGheTrongConsole(cb.getMaCB(), mb, dsSoGhe, 0);
-            if (ghe == null) return;
-            dsSoGhe[0] = ghe;
-            dsHangVe[0] = qlVe.xacDinhHangVe(ghe);
-            System.out.println("-> Da chon ghe: " + ghe + " (Hang: " + dsHangVe[0] + ")");
-            batDauTu = 1;
+                    String ghe = qlVe.chonGheTrongConsole(cb.getMaCB(), mb, dsSoGhe, 0);
+                    if (ghe == null) return;
+                    dsSoGhe[0] = ghe;
+                    dsHangVe[0] = qlVe.xacDinhHangVe(ghe);
+                    System.out.println("-> Da chon ghe: " + ghe + " (Hang: " + dsHangVe[0] + ")");
+                    batDauTu = 1;
+                }
+            }
         }
 
         for (int i = batDauTu; i < n; i++) {
@@ -238,43 +238,6 @@ public class HeThong {
         System.out.println("Danh sach ma ve: " + String.join(", ", dsMaVe));
     }
 
-    // Chon san bay tung buoc theo cay phan cap: Quoc gia -> Dia diem -> San bay
-    private SanBay chonSanBayTungBuoc(String moTa) {
-        if (qlDanhMuc.getSoLuongQuocGia() == 0) return null;
-        System.out.println("\nChon quoc gia " + moTa + ":");
-        for (int i = 0; i < qlDanhMuc.getSoLuongQuocGia(); i++) {
-            System.out.printf("[%d] %s (%s)%n", (i + 1), qlDanhMuc.getQuocGia(i).getTenQuocGia(), qlDanhMuc.getQuocGia(i).getMaQuocGia());
-        }
-        int cQG = NhapLieu.nhapSoNguyen("Chon STT quoc gia (0 de huy)", 0, qlDanhMuc.getSoLuongQuocGia());
-        if (cQG == 0) return null;
-        QuocGia qg = qlDanhMuc.getQuocGia(cQG - 1);
-
-        int demDD = 0;
-        int[] idxDD = new int[qlDanhMuc.getSoLuongDiaDiem()];
-        for (int i = 0; i < qlDanhMuc.getSoLuongDiaDiem(); i++) {
-            if (qlDanhMuc.getDiaDiem(i).getMaQuocGia().equalsIgnoreCase(qg.getMaQuocGia())) {
-                idxDD[demDD++] = i;
-                System.out.printf("[%d] %s (%s)%n", demDD, qlDanhMuc.getDiaDiem(i).getTenDiaDiem(), qlDanhMuc.getDiaDiem(i).getMaDiaDiem());
-            }
-        }
-        if (demDD == 0) return null;
-        int cDD = NhapLieu.nhapSoNguyen("Chon STT dia diem (0 de huy)", 0, demDD);
-        if (cDD == 0) return null;
-
-        DiaDiem dd = qlDanhMuc.getDiaDiem(idxDD[cDD - 1]);
-        int demSB = 0;
-        int[] idxSB = new int[qlDanhMuc.getSoLuongSanBay()];
-        for (int i = 0; i < qlDanhMuc.getSoLuongSanBay(); i++) {
-            SanBay sb = qlDanhMuc.getSanBay(i);
-            if (sb.getMaDiaDiem().equalsIgnoreCase(dd.getMaDiaDiem()) && sb.isTrangThaiHoatDong()) {
-                idxSB[demSB++] = i;
-                System.out.printf("[%d] %s (%s)%n", demSB, sb.getTenSanBay(), sb.getMaSanBay());
-            }
-        }
-        if (demSB == 0) return null;
-        int cSB = NhapLieu.nhapSoNguyen("Chon STT san bay (0 de huy)", 0, demSB);
-        return (cSB == 0) ? null : qlDanhMuc.getSanBay(idxSB[cSB - 1]);
-    }
 
     private void xuLyTraCuu() {
         while (true) {

@@ -47,6 +47,9 @@ public class ChuyenBayQuocTe extends ChuyenBay {
             if (khach.getSoVisa() == null || khach.getSoVisa().trim().isEmpty()) {
                 return "Chuyen bay yeu cau Visa nhung khach hang chua co so visa";
             }
+            if (khach.getNgayHetHanVisa() == null || khach.getNgayHetHanVisa().isBefore(this.ngayDen)) {
+                return "Visa da het han hoac khong hop le cho ngay bay";
+            }
         }
         return "";
     }

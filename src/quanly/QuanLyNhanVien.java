@@ -39,20 +39,19 @@ public class QuanLyNhanVien {
         return true;
     }
 
-    // Rang buoc toan ven: khong xoa nhan vien da tung lap hoa don trong he thong
-    public boolean xoaNhanVien(String maNV, QuanLyHoaDon qlHD) {
+    public boolean xoaNhanVien(String maNV) {
         NhanVien nv = timNhanVien(maNV);
         if (nv == null) {
             System.out.println("Loi: Khong tim thay ma " + maNV);
             return false;
         }
-        if (qlHD.kiemTraMaNVDaDung(maNV)) {
-            System.out.println("Loi: Khong the xoa nhan vien da tung lap hoa don!");
-            return false;
-        }
         danhSachNhanVien.remove(nv);
         System.out.println("Xoa nhan vien " + maNV + " thanh cong!");
         return true;
+    }
+
+    public boolean xoaNhanVien(String maNV, QuanLyHoaDon qlHD) {
+        return xoaNhanVien(maNV);
     }
 
     public ArrayList<NhanVien> layDanhSachHoatDong() {

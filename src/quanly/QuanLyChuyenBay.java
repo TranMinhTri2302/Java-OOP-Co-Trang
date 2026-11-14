@@ -41,20 +41,19 @@ public class QuanLyChuyenBay {
         return false;
     }
 
-    // Rang buoc toan ven: chi duoc xoa chuyen bay khi chua co ve hoac hoa don nao phat sinh
-    public boolean xoaChuyenBay(String maCB, QuanLyVe qlVe, QuanLyHoaDon qlHD) {
+    public boolean xoaChuyenBay(String maCB) {
         ChuyenBay cb = timChuyenBay(maCB);
         if (cb == null) {
             System.out.println("Loi: Khong tim thay chuyen bay " + maCB);
             return false;
         }
-        if (qlVe.kiemTraMaCBDaDung(maCB) || qlHD.kiemTraMaCBDaDung(maCB)) {
-            System.out.println("Loi: Khong the xoa chuyen bay da co ve hoac hoa don tham chieu (ke ca da huy)!");
-            return false;
-        }
         danhSachChuyenBay.remove(cb);
         System.out.println("Xoa chuyen bay " + maCB + " thanh cong!");
         return true;
+    }
+
+    public boolean xoaChuyenBay(String maCB, QuanLyVe qlVe, QuanLyHoaDon qlHD) {
+        return xoaChuyenBay(maCB);
     }
 
     public boolean doiTrangThai(String maCB) {
@@ -103,7 +102,6 @@ public class QuanLyChuyenBay {
         ArrayList<ChuyenBay> ds = layDanhSachChuyenBayKhaDung(maSanBayDi, maSanBayDen);
         if (ds.isEmpty()) {
             System.out.println("Hien tai khong co chuyen bay nao con ve cho tuyen bay nay o thoi diem tuong lai!");
-            System.out.println("(Goi y: Ban co the them chuyen bay moi tai Menu 5 -> 5. Them chuyen bay moi)");
             return null;
         }
 
@@ -219,6 +217,10 @@ public class QuanLyChuyenBay {
         LocalTime gioDen = NhapLieu.nhapGio("Nhap gio den");
         LocalDateTime start = LocalDateTime.of(ngayDi, gioDi);
         LocalDateTime end = LocalDateTime.of(ngayDen, gioDen);
+        if (!start.isAfter(LocalDateTime.now())) {
+            System.out.println("Loi: Thoi gian khoi hanh phai o tuong lai (sau thoi diem hien tai)!");
+            return false;
+        }
         if (!end.isAfter(start) || kiemTraTrungLich(maMB, start, end, maCB)) {
             System.out.println("Loi: Thoi diem den phai sau ngay di hoac may bay bi trung lich!");
             return false;

@@ -53,20 +53,19 @@ public class QuanLyKhachHang {
         return true;
     }
 
-    // Rang buoc toan ven: khong duoc xoa khach hang da tung co hoa don hoac ve bay
-    public boolean xoaKhachHang(String maKH, QuanLyHoaDon qlHD) {
+    public boolean xoaKhachHang(String maKH) {
         KhachHang kh = timKhachHang(maKH);
         if (kh == null) {
             System.out.println("Loi: Khong tim thay ma " + maKH);
             return false;
         }
-        if (qlHD.kiemTraMaKHDaDung(maKH)) {
-            System.out.println("Loi: Khong duoc xoa khach da co hoa don hoac ve bay tham chieu (ke ca da huy)!");
-            return false;
-        }
         danhSachKhachHang.remove(kh);
         System.out.println("Xoa khach hang " + maKH + " thanh cong!");
         return true;
+    }
+
+    public boolean xoaKhachHang(String maKH, QuanLyHoaDon qlHD) {
+        return xoaKhachHang(maKH);
     }
 
     public void hienThiDanhSach() {
@@ -146,7 +145,7 @@ public class QuanLyKhachHang {
         String hc = NhapLieu.nhapChuoiCoTheRong("So ho chieu");
         LocalDate hanHC = (!hc.isEmpty()) ? NhapLieu.nhapNgay("Ngay het han ho chieu") : null;
         String visa = NhapLieu.nhapChuoiCoTheRong("So visa (neu co)");
-        LocalDate hanVisa = null;
+        LocalDate hanVisa = (!visa.isEmpty()) ? NhapLieu.nhapNgay("Ngay het han visa") : null;
 
         KhachHang kh = new KhachHang(maKH, hoTen, ns, gt, qt, dc, sdt, email, cccd, hc, hanHC, visa, hanVisa, 0, 0.0);
         themKhachHang(kh);
@@ -156,30 +155,33 @@ public class QuanLyKhachHang {
 
     // Chon khach hang bao mat: khong in toan bo danh sach ma cho phep nhap moi hoac tra cuu CCCD/Ma KH
     public KhachHang chonHoacThemKhachHang(String tieuDe) {
-        System.out.println("\n==================================================");
-        System.out.println("          " + tieuDe);
-        System.out.println("==================================================");
-        System.out.println("1. Nhap thong tin khach hang moi");
-        System.out.println("2. Tra cuu khach hang cu (nhap CCCD hoac Ma KH)");
-        System.out.println("0. Huy thao tac");
-        System.out.println("==================================================");
-        int c = NhapLieu.nhapSoNguyen("Lua chon cua ban", 0, 2);
-        if (c == 1) {
-            return nhapKhachHangMoi();
-        } else if (c == 2) {
-            String kw = NhapLieu.nhapChuoi("Nhap so CCCD hoac Ma KH");
-            KhachHang kh = timKhachHangTheoCCCDHoacMa(kw);
-            if (kh != null) {
-                System.out.println("-> Tim thay: " + kh.getHoTen() + " (Ma: " + kh.getMaKH() + ", CCCD: " + kh.getSoCCCD() + ")");
-                if (NhapLieu.nhapXacNhan("Xac nhan su dung thong tin nay?")) {
-                    return kh;
+        while (true) {
+            System.out.println("\n==================================================");
+            System.out.println("          " + tieuDe);
+            System.out.println("==================================================");
+            System.out.println("1. Nhap thong tin khach hang moi");
+            System.out.println("2. Tra cuu khach hang cu (nhap CCCD hoac Ma KH)");
+            System.out.println("0. Huy thao tac");
+            System.out.println("==================================================");
+            int c = NhapLieu.nhapSoNguyen("Lua chon cua ban", 0, 2);
+            if (c == 0) return null;
+            if (c == 1) return nhapKhachHangMoi();
+            if (c == 2) {
+                while (true) {
+                    String kw = NhapLieu.nhapChuoi("Nhap so CCCD hoac Ma KH (nhap 0 de quay lai)");
+                    if ("0".equals(kw)) break;
+                    KhachHang kh = timKhachHangTheoCCCDHoacMa(kw);
+                    if (kh != null) {
+                        System.out.println("-> Tim thay: " + kh.getHoTen() + " (Ma: " + kh.getMaKH() + ", CCCD: " + kh.getSoCCCD() + ")");
+                        if (NhapLieu.nhapXacNhan("Xac nhan su dung thong tin nay?")) {
+                            return kh;
+                        }
+                    } else {
+                        System.out.println("Loi: Khong tim thay khach hang voi thong tin '" + kw + "'. Vui long thu lai hoac nhap 0 de quay lai!");
+                    }
                 }
-            } else {
-                System.out.println("Khong tim thay thong tin phu hop! Chuyen sang them moi...");
-                return nhapKhachHangMoi();
             }
         }
-        return null;
     }
 
     public void menuQuanLy(QuanLyHoaDon qlHD) {
@@ -246,6 +248,7 @@ public class QuanLyKhachHang {
         String visa = NhapLieu.nhapChuoiCoTheRong("So visa (" + (kh.getSoVisa() != null ? kh.getSoVisa() : "") + ")");
         if (!visa.isEmpty()) {
             kh.setSoVisa(visa);
+            kh.setNgayHetHanVisa(NhapLieu.nhapNgay("Ngay het han visa"));
         }
         System.out.println("Cap nhat thong tin thanh cong!");
     }
