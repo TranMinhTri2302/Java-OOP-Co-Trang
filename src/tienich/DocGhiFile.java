@@ -182,9 +182,11 @@ public class DocGhiFile {
     private boolean ghiFileAnToan(String path, ArrayList<String> lines) {
         if (coLoiDocFile) return false;
         Path tgt = Paths.get(path), tmp = Paths.get(path + ".tmp");
-        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmp.toFile()), StandardCharsets.UTF_8))) {
-            for (String l : lines) { bw.write(l); bw.newLine(); }
-            bw.close(); Files.move(tmp, tgt, StandardCopyOption.REPLACE_EXISTING);
+        try {
+            try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmp.toFile()), StandardCharsets.UTF_8))) {
+                for (String l : lines) { bw.write(l); bw.newLine(); }
+            }
+            Files.move(tmp, tgt, StandardCopyOption.REPLACE_EXISTING);
             return true;
         } catch (Exception e) { System.out.println("Loi luu file " + path); return false; }
     }

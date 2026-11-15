@@ -207,11 +207,11 @@ public String kiemTraDieuKien(KhachHang kh) {
 11. Trong ChuyenBayQuocTe.java (Kiem tra Ho chieu):
 @Override
 public String kiemTraDieuKien(KhachHang kh) {
-    if (kh == null) return "Khach hang khong ton tai!";
-    if (kh.getSoHoChieu() == null || kh.getSoHoChieu().trim().isEmpty()) {
-        return "Bay quoc te bat buoc phai co ho chieu!";
-    }
-    return "";
+if (khach.getSoHoChieu() == null || khach.getNgayHetHanHoChieu().isBefore(this.ngayDen)) 
+    return "Ho chieu khong hop le!";
+if (this.yeuCauKiemTraVisa && (khach.getSoVisa() == null || khach.getNgayHetHanVisa().isBefore(this.ngayDen))) 
+    return "Visa khong hop le!";
+return "";
 }
 
 * GIAI THICH LOGIC & TIPS HOC THUOC:
@@ -271,13 +271,6 @@ public boolean kiemTraTrungLich(String maMB, LocalDateTime startMoi, LocalDateTi
     return false;
 }
 
-16. Rang buoc toan ven khi xoa chuyen bay:
-public boolean xoaChuyenBay(String maCB, QuanLyVe qlVe, QuanLyHoaDon qlHD) {
-    ChuyenBay cb = timChuyenBay(maCB);
-    if (cb == null || qlVe.kiemTraMaCBDaDung(maCB) || qlHD.kiemTraMaCBDaDung(maCB)) return false;
-    danhSachChuyenBay.remove(cb);
-    return true;
-}
 
 17. In bang chi tiet hoa don:
 public void inThongKeChiTiet() {
