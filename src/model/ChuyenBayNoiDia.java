@@ -30,7 +30,8 @@ public class ChuyenBayNoiDia extends ChuyenBay {
     }
 
     // Ghi de phuong thuc truu tuong de the hien tinh da hinh (Polymorphism):
-    // Chuyen bay noi dia yeu cau hanh khach phai dat du so ngay tuoi toi thieu (tinh tu ngay sinh den ngay bay)
+    // 1. Chuyen bay noi dia yeu cau hanh khach phai dat du so ngay tuoi toi thieu (em be phai >= DoTuoiEmBeToiThieu)
+    // 2. Hanh khach tu 14 tuoi tro len bat buoc phai co so CCCD hoac dinh danh VNeID muc 2
     @Override
     public String kiemTraDieuKien(KhachHang khach) {
         if (khach == null) return "Khach hang khong ton tai";
@@ -39,6 +40,11 @@ public class ChuyenBayNoiDia extends ChuyenBay {
         long soNgayTuoi = ChronoUnit.DAYS.between(khach.getNgaySinh(), this.ngayDi);
         if (soNgayTuoi < this.DoTuoiEmBeToiThieu) {
             return "Chua du tuoi toi thieu (" + this.DoTuoiEmBeToiThieu + " ngay tuoi), hien tai: " + soNgayTuoi + " ngay";
+        }
+        if (soNgayTuoi >= 14 * 365) {
+            if (khach.getSoCCCD() == null || khach.getSoCCCD().trim().isEmpty()) {
+                return "Hanh khach tu 14 tuoi tro len bat buoc phai co so CCCD hoac tai khoan VNeID muc 2 de bay noi dia";
+            }
         }
         return "";
     }

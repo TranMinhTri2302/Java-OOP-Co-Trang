@@ -141,14 +141,14 @@ public class NhapLieu {
 
     public static boolean nhapXacNhan(String tb) {
         while (true) {
-            System.out.print(tb + " (Y/N): ");
+            System.out.print(tb + " (Y/N hoac C/K): ");
             String l = docDong();
             if (l != null) {
                 String t = l.trim().toUpperCase();
-                if (t.equals("Y")) return true;
-                if (t.equals("N")) return false;
+                if (t.equals("Y") || t.equals("YES") || t.equals("C") || t.equals("CO")) return true;
+                if (t.equals("N") || t.equals("NO") || t.equals("K") || t.equals("KHONG")) return false;
             }
-            System.out.println("Loi: Chi nhap 'Y' hoac 'N'!");
+            System.out.println("Loi: Vui long nhap Y/C (Dong y) hoac N/K (Khong)!");
         }
     }
 }

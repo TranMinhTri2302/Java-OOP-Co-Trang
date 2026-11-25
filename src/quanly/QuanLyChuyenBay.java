@@ -1,5 +1,6 @@
 package quanly;
 
+import danhsach.DanhSachChuyenBay;
 import model.*;
 import tienich.NhapLieu;
 import java.time.LocalDate;
@@ -7,49 +8,37 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-// Lop quan ly danh sach cac chuyen bay va cac nghiep vu kiem tra lich bay, chong gio
+// Lop quan ly nghiep vu va giao dien console chuyen bay, su dung DanhSachChuyenBay de luu tru
 public class QuanLyChuyenBay {
-    private ArrayList<ChuyenBay> danhSachChuyenBay = new ArrayList<ChuyenBay>();
+    private DanhSachChuyenBay dsCB;
 
-    public ArrayList<ChuyenBay> getDanhSachChuyenBay() { return danhSachChuyenBay; }
-    public int getSoLuong() { return danhSachChuyenBay.size(); }
-    public ChuyenBay getChuyenBay(int index) { return (index >= 0 && index < danhSachChuyenBay.size()) ? danhSachChuyenBay.get(index) : null; }
-
-    public void themChuyenBay(ChuyenBay cb) {
-        if (cb != null && timChuyenBay(cb.getMaCB()) == null) danhSachChuyenBay.add(cb);
+    public QuanLyChuyenBay() {
+        this.dsCB = new DanhSachChuyenBay();
     }
 
-    public ChuyenBay timChuyenBay(String maCB) {
-        if (maCB == null) return null;
-        for (ChuyenBay cb : danhSachChuyenBay) {
-            if (maCB.equalsIgnoreCase(cb.getMaCB())) return cb;
-        }
-        return null;
+    public QuanLyChuyenBay(DanhSachChuyenBay dsCB) {
+        this.dsCB = (dsCB != null) ? dsCB : new DanhSachChuyenBay();
     }
 
-    // Kiem tra chong lich bay tren cung mot may bay:
-    // Hai chuyen bay bi trung lich khi: start1 < end2 && start2 < end1
+    public DanhSachChuyenBay getDsCB() { return dsCB; }
+    public ArrayList<ChuyenBay> getDanhSachChuyenBay() { return dsCB.getDanhSach(); }
+    public int getSoLuong() { return dsCB.getSoLuong(); }
+    public ChuyenBay getChuyenBay(int index) { return dsCB.getChuyenBay(index); }
+    public void themChuyenBay(ChuyenBay cb) { dsCB.themChuyenBay(cb); }
+    public ChuyenBay timChuyenBay(String maCB) { return dsCB.timChuyenBay(maCB); }
+
     public boolean kiemTraTrungLich(String maMayBay, LocalDateTime startMoi, LocalDateTime endMoi, String maCBIgnore) {
-        for (ChuyenBay cb : danhSachChuyenBay) {
-            if (cb.getMaCB().equalsIgnoreCase(maCBIgnore) || "HUY".equalsIgnoreCase(cb.getTrangThai())) continue;
-            if (cb.getMaMayBay().equalsIgnoreCase(maMayBay)) {
-                LocalDateTime startHienTai = LocalDateTime.of(cb.getNgayDi(), cb.getGioDi());
-                LocalDateTime endHienTai = LocalDateTime.of(cb.getNgayDen(), cb.getGioDen());
-                if (startMoi.isBefore(endHienTai) && startHienTai.isBefore(endMoi)) return true;
-            }
-        }
-        return false;
+        return dsCB.kiemTraTrungLich(maMayBay, startMoi, endMoi, maCBIgnore);
     }
 
     public boolean xoaChuyenBay(String maCB) {
-        ChuyenBay cb = timChuyenBay(maCB);
-        if (cb == null) {
+        boolean ok = dsCB.xoaChuyenBay(maCB);
+        if (ok) {
+            System.out.println("Xoa chuyen bay " + maCB + " thanh cong!");
+        } else {
             System.out.println("Loi: Khong tim thay chuyen bay " + maCB);
-            return false;
         }
-        danhSachChuyenBay.remove(cb);
-        System.out.println("Xoa chuyen bay " + maCB + " thanh cong!");
-        return true;
+        return ok;
     }
 
     public boolean xoaChuyenBay(String maCB, QuanLyVe qlVe, QuanLyHoaDon qlHD) {
@@ -66,30 +55,21 @@ public class QuanLyChuyenBay {
             System.out.println("Loi: Chuyen bay da bi huy!");
             return false;
         }
-        String moi = "MO_BAN".equalsIgnoreCase(cb.getTrangThai()) ? "DONG_BAN" : "MO_BAN";
-        cb.setTrangThai(moi);
-        System.out.println("Chuyen bay " + maCB + " da chuyen sang trang thai: " + moi);
-        return true;
-    }
-
-    // Lay tat ca cac chuyen bay kha dung cho mot tuyen bay o tuong lai
-    public ArrayList<ChuyenBay> layDanhSachChuyenBayKhaDung(String maSanBayDi, String maSanBayDen) {
-        ArrayList<ChuyenBay> res = new ArrayList<ChuyenBay>();
-        LocalDateTime now = LocalDateTime.now();
-        for (ChuyenBay cb : danhSachChuyenBay) {
-            if (cb.getMaSanBayDi().equalsIgnoreCase(maSanBayDi) && cb.getMaSanBayDen().equalsIgnoreCase(maSanBayDen) &&
-                "MO_BAN".equalsIgnoreCase(cb.getTrangThai()) && cb.getSoVeConLai() > 0) {
-                if (LocalDateTime.of(cb.getNgayDi(), cb.getGioDi()).isAfter(now)) res.add(cb);
-            }
+        boolean ok = dsCB.doiTrangThai(maCB);
+        if (ok) {
+            System.out.println("Chuyen bay " + maCB + " da chuyen sang trang thai: " + cb.getTrangThai());
         }
-        return res;
+        return ok;
     }
 
-    // Loc chuyen bay hop le de ban ve (phai MO_BAN, con ve, va gio bay o tuong lai)
+    public ArrayList<ChuyenBay> layDanhSachChuyenBayKhaDung(String maSanBayDi, String maSanBayDen) {
+        return dsCB.layDanhSachChuyenBayKhaDung(maSanBayDi, maSanBayDen);
+    }
+
     public ArrayList<ChuyenBay> locChuyenBayDatVe(String maSanBayDi, String maSanBayDen, LocalDate ngayDi) {
         ArrayList<ChuyenBay> res = new ArrayList<ChuyenBay>();
         LocalDateTime now = LocalDateTime.now();
-        for (ChuyenBay cb : danhSachChuyenBay) {
+        for (ChuyenBay cb : dsCB.getDanhSach()) {
             if (cb.getMaSanBayDi().equalsIgnoreCase(maSanBayDi) && cb.getMaSanBayDen().equalsIgnoreCase(maSanBayDen) &&
                 cb.getNgayDi().equals(ngayDi) && "MO_BAN".equalsIgnoreCase(cb.getTrangThai()) && cb.getSoVeConLai() > 0) {
                 if (LocalDateTime.of(cb.getNgayDi(), cb.getGioDi()).isAfter(now)) res.add(cb);
@@ -139,14 +119,7 @@ public class QuanLyChuyenBay {
     }
 
     public void hienThiDanhSach() {
-        System.out.println("\n================ DANH SACH CHUYEN BAY ================");
-        if (danhSachChuyenBay.isEmpty()) {
-            System.out.println("Danh sach trong.");
-            return;
-        }
-        for (int i = 0; i < danhSachChuyenBay.size(); i++) {
-            System.out.printf("[%d] %s%n", (i + 1), danhSachChuyenBay.get(i));
-        }
+        dsCB.xuatDanhSach();
     }
 
     public void timKiemTheoMa(String maCB) {
@@ -157,7 +130,7 @@ public class QuanLyChuyenBay {
     public void timKiemTheoTuyen(String sbDi, String sbDen) {
         System.out.println("\n---------------- TIM CHUYEN BAY " + sbDi + " -> " + sbDen + " ----------------");
         int d = 0;
-        for (ChuyenBay cb : danhSachChuyenBay) {
+        for (ChuyenBay cb : dsCB.getDanhSach()) {
             if (cb.getMaSanBayDi().equalsIgnoreCase(sbDi) && cb.getMaSanBayDen().equalsIgnoreCase(sbDen)) {
                 System.out.println(cb);
                 d++;
@@ -169,7 +142,7 @@ public class QuanLyChuyenBay {
     public void timKiemTheoNgay(LocalDate ngayDi) {
         System.out.println("\n---------------- TIM CHUYEN BAY NGAY " + ngayDi + " ----------------");
         int d = 0;
-        for (ChuyenBay cb : danhSachChuyenBay) {
+        for (ChuyenBay cb : dsCB.getDanhSach()) {
             if (cb.getNgayDi().equals(ngayDi)) {
                 System.out.println(cb);
                 d++;

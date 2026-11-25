@@ -1,97 +1,101 @@
 package quanly;
 
+import danhsach.DanhSachDanhMuc;
 import model.*;
 import tienich.NhapLieu;
 import java.util.ArrayList;
 
-// Lop quan ly cac danh muc he thong: QuocGia, DiaDiem, SanBay, HangHangKhong, MayBay
+// Lop quan ly nghiep vu va giao dien console cac danh muc, su dung DanhSachDanhMuc de luu tru
 public class QuanLyDanhMuc {
-    private ArrayList<QuocGia> danhSachQuocGia = new ArrayList<QuocGia>();
-    private ArrayList<DiaDiem> danhSachDiaDiem = new ArrayList<DiaDiem>();
-    private ArrayList<SanBay> danhSachSanBay = new ArrayList<SanBay>();
-    private ArrayList<HangHangKhong> danhSachHang = new ArrayList<HangHangKhong>();
-    private ArrayList<MayBay> danhSachMayBay = new ArrayList<MayBay>();
+    private DanhSachDanhMuc dsDM;
 
-    public ArrayList<QuocGia> getDanhSachQuocGia() { return danhSachQuocGia; }
-    public ArrayList<DiaDiem> getDanhSachDiaDiem() { return danhSachDiaDiem; }
-    public ArrayList<SanBay> getDanhSachSanBay() { return danhSachSanBay; }
-    public ArrayList<HangHangKhong> getDanhSachHang() { return danhSachHang; }
-    public ArrayList<MayBay> getDanhSachMayBay() { return danhSachMayBay; }
-
-    public int getSoLuongQuocGia() { return danhSachQuocGia.size(); }
-    public QuocGia getQuocGia(int index) { return (index >= 0 && index < danhSachQuocGia.size()) ? danhSachQuocGia.get(index) : null; }
-    public int getSoLuongDiaDiem() { return danhSachDiaDiem.size(); }
-    public DiaDiem getDiaDiem(int index) { return (index >= 0 && index < danhSachDiaDiem.size()) ? danhSachDiaDiem.get(index) : null; }
-    public int getSoLuongSanBay() { return danhSachSanBay.size(); }
-    public SanBay getSanBay(int index) { return (index >= 0 && index < danhSachSanBay.size()) ? danhSachSanBay.get(index) : null; }
-    public int getSoLuongHang() { return danhSachHang.size(); }
-    public HangHangKhong getHang(int index) { return (index >= 0 && index < danhSachHang.size()) ? danhSachHang.get(index) : null; }
-    public int getSoLuongMayBay() { return danhSachMayBay.size(); }
-    public MayBay getMayBay(int index) { return (index >= 0 && index < danhSachMayBay.size()) ? danhSachMayBay.get(index) : null; }
-
-    public void themQuocGia(QuocGia qg) { if (qg != null && timQuocGia(qg.getMaQuocGia()) == null) danhSachQuocGia.add(qg); }
-    public QuocGia timQuocGia(String maQG) {
-        if (maQG == null) return null;
-        for (QuocGia qg : danhSachQuocGia) if (maQG.equalsIgnoreCase(qg.getMaQuocGia())) return qg;
-        return null;
+    public QuanLyDanhMuc() {
+        this.dsDM = new DanhSachDanhMuc();
     }
 
-    public void themDiaDiem(DiaDiem dd) { if (dd != null && timDiaDiem(dd.getMaDiaDiem()) == null) danhSachDiaDiem.add(dd); }
-    public DiaDiem timDiaDiem(String maDD) {
-        if (maDD == null) return null;
-        for (DiaDiem dd : danhSachDiaDiem) if (maDD.equalsIgnoreCase(dd.getMaDiaDiem())) return dd;
-        return null;
+    public QuanLyDanhMuc(DanhSachDanhMuc dsDM) {
+        this.dsDM = (dsDM != null) ? dsDM : new DanhSachDanhMuc();
     }
 
-    public void themSanBay(SanBay sb) { if (sb != null && timSanBay(sb.getMaSanBay()) == null) danhSachSanBay.add(sb); }
-    public SanBay timSanBay(String maSB) {
-        if (maSB == null) return null;
-        for (SanBay sb : danhSachSanBay) if (maSB.equalsIgnoreCase(sb.getMaSanBay())) return sb;
-        return null;
-    }
+    public DanhSachDanhMuc getDsDM() { return dsDM; }
+    public ArrayList<QuocGia> getDanhSachQuocGia() { return dsDM.getDanhSachQuocGia(); }
+    public ArrayList<DiaDiem> getDanhSachDiaDiem() { return dsDM.getDanhSachDiaDiem(); }
+    public ArrayList<SanBay> getDanhSachSanBay() { return dsDM.getDanhSachSanBay(); }
+    public ArrayList<HangHangKhong> getDanhSachHang() { return dsDM.getDanhSachHang(); }
+    public ArrayList<MayBay> getDanhSachMayBay() { return dsDM.getDanhSachMayBay(); }
 
-    public void themHang(HangHangKhong hang) { if (hang != null && timHang(hang.getMaHang()) == null) danhSachHang.add(hang); }
-    public HangHangKhong timHang(String maHang) {
-        if (maHang == null) return null;
-        for (HangHangKhong h : danhSachHang) if (maHang.equalsIgnoreCase(h.getMaHang())) return h;
-        return null;
-    }
+    public int getSoLuongQuocGia() { return dsDM.getSoLuongQuocGia(); }
+    public QuocGia getQuocGia(int index) { return dsDM.getQuocGia(index); }
+    public int getSoLuongDiaDiem() { return dsDM.getSoLuongDiaDiem(); }
+    public DiaDiem getDiaDiem(int index) { return dsDM.getDiaDiem(index); }
+    public int getSoLuongSanBay() { return dsDM.getSoLuongSanBay(); }
+    public SanBay getSanBay(int index) { return dsDM.getSanBay(index); }
+    public int getSoLuongHang() { return dsDM.getSoLuongHang(); }
+    public HangHangKhong getHang(int index) { return dsDM.getHang(index); }
+    public int getSoLuongMayBay() { return dsDM.getSoLuongMayBay(); }
+    public MayBay getMayBay(int index) { return dsDM.getMayBay(index); }
 
-    public void themMayBay(MayBay mb) { if (mb != null && timMayBay(mb.getMaMayBay()) == null) danhSachMayBay.add(mb); }
-    public MayBay timMayBay(String maMB) {
-        if (maMB == null) return null;
-        for (MayBay mb : danhSachMayBay) if (maMB.equalsIgnoreCase(mb.getMaMayBay())) return mb;
-        return null;
-    }
+    public void themQuocGia(QuocGia qg) { dsDM.themQuocGia(qg); }
+    public QuocGia timQuocGia(String maQG) { return dsDM.timQuocGia(maQG); }
+    public void themDiaDiem(DiaDiem dd) { dsDM.themDiaDiem(dd); }
+    public DiaDiem timDiaDiem(String maDD) { return dsDM.timDiaDiem(maDD); }
+    public void themSanBay(SanBay sb) { dsDM.themSanBay(sb); }
+    public SanBay timSanBay(String maSB) { return dsDM.timSanBay(maSB); }
+    public void themHang(HangHangKhong hang) { dsDM.themHang(hang); }
+    public HangHangKhong timHang(String maHang) { return dsDM.timHang(maHang); }
+    public void themMayBay(MayBay mb) { dsDM.themMayBay(mb); }
+    public MayBay timMayBay(String maMB) { return dsDM.timMayBay(maMB); }
 
-    // Tra ve quoc gia cua mot san bay thong qua lien ket: SanBay -> DiaDiem -> QuocGia
     public QuocGia layQuocGiaCuaSanBay(String maSanBay) {
-        SanBay sb = timSanBay(maSanBay); if (sb == null) return null;
-        DiaDiem dd = timDiaDiem(sb.getMaDiaDiem()); return dd != null ? timQuocGia(dd.getMaQuocGia()) : null;
+        SanBay sb = timSanBay(maSanBay);
+        if (sb == null) return null;
+        DiaDiem dd = timDiaDiem(sb.getMaDiaDiem());
+        return dd != null ? timQuocGia(dd.getMaQuocGia()) : null;
     }
 
     public void xemDanhSachQuocGia() {
         System.out.println("\n================ DANH MUC QUOC GIA ================");
-        for (QuocGia qg : danhSachQuocGia) System.out.println(qg);
+        for (QuocGia qg : dsDM.getDanhSachQuocGia()) System.out.println(qg);
     }
     public void xemDanhSachDiaDiem() {
         System.out.println("\n================ DANH MUC DIA DIEM ================");
-        for (DiaDiem dd : danhSachDiaDiem) System.out.println(dd);
+        for (DiaDiem dd : dsDM.getDanhSachDiaDiem()) System.out.println(dd);
     }
     public void xemDanhSachSanBay() {
         System.out.println("\n================ DANH MUC SAN BAY ================");
-        for (SanBay sb : danhSachSanBay) System.out.println(sb);
+        for (SanBay sb : dsDM.getDanhSachSanBay()) System.out.println(sb);
     }
     public void xemDanhSachHang() {
         System.out.println("\n================ DANH MUC HANG HANG KHONG ================");
-        for (HangHangKhong h : danhSachHang) System.out.println(h);
+        for (HangHangKhong h : dsDM.getDanhSachHang()) System.out.println(h);
     }
     public void xemDanhSachMayBay() {
         System.out.println("\n================ DANH MUC MAY BAY ================");
-        for (MayBay mb : danhSachMayBay) System.out.println(mb);
+        for (MayBay mb : dsDM.getDanhSachMayBay()) System.out.println(mb);
     }
 
-    // Cho phep nguoi dung chon san bay theo tung buoc phan cap: Quoc gia -> Dia diem -> San bay
+    public void menuXemDanhMuc() {
+        while (true) {
+            System.out.println("\n==================================================");
+            System.out.println("                XEM DANH MUC HE THONG");
+            System.out.println("==================================================");
+            System.out.println("1. Danh muc Quoc gia");
+            System.out.println("2. Danh muc Dia diem");
+            System.out.println("3. Danh muc San bay");
+            System.out.println("4. Danh muc Hang hang khong");
+            System.out.println("5. Danh muc May bay");
+            System.out.println("0. Quay lai menu chinh");
+            System.out.println("==================================================");
+            int c = NhapLieu.nhapSoNguyen("Lua chon cua ban", 0, 5);
+            if (c == 0) break;
+            if (c == 1) xemDanhSachQuocGia();
+            else if (c == 2) xemDanhSachDiaDiem();
+            else if (c == 3) xemDanhSachSanBay();
+            else if (c == 4) xemDanhSachHang();
+            else if (c == 5) xemDanhSachMayBay();
+        }
+    }
+
     public SanBay chonSanBayTungBuoc(String moTa) {
         if (getSoLuongQuocGia() == 0) return null;
         System.out.println("\nChon quoc gia " + moTa + ":");

@@ -1,26 +1,30 @@
 package quanly;
 
+import danhsach.DanhSachNhanVien;
 import model.NhanVien;
 import tienich.NhapLieu;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-// Lop quan ly danh sach nhan vien va nghiep vu phan cong lap hoa don
+// Lop quan ly nghiep vu va giao dien console nhan vien, su dung DanhSachNhanVien de luu tru
 public class QuanLyNhanVien {
-    private ArrayList<NhanVien> danhSachNhanVien = new ArrayList<NhanVien>();
+    private DanhSachNhanVien dsNV;
 
-    public ArrayList<NhanVien> getDanhSachNhanVien() { return danhSachNhanVien; }
-    public int getSoLuong() { return danhSachNhanVien.size(); }
-    public NhanVien getNhanVien(int index) { return (index >= 0 && index < danhSachNhanVien.size()) ? danhSachNhanVien.get(index) : null; }
-    public void themNhanVien(NhanVien nv) { if (nv != null && timNhanVien(nv.getMaNV()) == null) danhSachNhanVien.add(nv); }
-
-    public NhanVien timNhanVien(String maNV) {
-        if (maNV == null) return null;
-        for (NhanVien nv : danhSachNhanVien) {
-            if (maNV.equalsIgnoreCase(nv.getMaNV())) return nv;
-        }
-        return null;
+    public QuanLyNhanVien() {
+        this.dsNV = new DanhSachNhanVien();
     }
+
+    public QuanLyNhanVien(DanhSachNhanVien dsNV) {
+        this.dsNV = (dsNV != null) ? dsNV : new DanhSachNhanVien();
+    }
+
+    public DanhSachNhanVien getDsNV() { return dsNV; }
+    public ArrayList<NhanVien> getDanhSachNhanVien() { return dsNV.getDanhSach(); }
+    public int getSoLuong() { return dsNV.getSoLuong(); }
+    public NhanVien getNhanVien(int index) { return dsNV.getNhanVien(index); }
+    public void themNhanVien(NhanVien nv) { dsNV.themNhanVien(nv); }
+    public NhanVien timNhanVien(String maNV) { return dsNV.timNhanVien(maNV); }
+    public ArrayList<NhanVien> layDanhSachHoatDong() { return dsNV.layDanhSachHoatDong(); }
 
     public static String kiemTraHopLe(String maNV, String hoTen, LocalDate ngaySinh, String email, String soDienThoai) {
         if (maNV == null || maNV.trim().isEmpty()) return "Ma nhan vien khong duoc de trong!";
@@ -32,52 +36,32 @@ public class QuanLyNhanVien {
     }
 
     public boolean suaNhanVien(String maNV, String tenMoi, String sdtMoi) {
-        NhanVien nv = timNhanVien(maNV);
-        if (nv == null) return false;
-        if (tenMoi != null && !tenMoi.isEmpty()) nv.setHoTen(tenMoi);
-        if (sdtMoi != null && !sdtMoi.isEmpty()) nv.setSoDienThoai(sdtMoi);
-        return true;
+        return dsNV.suaNhanVien(maNV, tenMoi, sdtMoi);
     }
 
     public boolean xoaNhanVien(String maNV) {
-        NhanVien nv = timNhanVien(maNV);
-        if (nv == null) {
+        boolean ok = dsNV.xoaNhanVien(maNV);
+        if (ok) {
+            System.out.println("Xoa nhan vien " + maNV + " thanh cong!");
+        } else {
             System.out.println("Loi: Khong tim thay ma " + maNV);
-            return false;
         }
-        danhSachNhanVien.remove(nv);
-        System.out.println("Xoa nhan vien " + maNV + " thanh cong!");
-        return true;
+        return ok;
     }
 
     public boolean xoaNhanVien(String maNV, QuanLyHoaDon qlHD) {
         return xoaNhanVien(maNV);
     }
 
-    public ArrayList<NhanVien> layDanhSachHoatDong() {
-        ArrayList<NhanVien> res = new ArrayList<NhanVien>();
-        for (NhanVien nv : danhSachNhanVien) {
-            if (nv.isTrangThaiLamViec()) res.add(nv);
-        }
-        return res;
-    }
-
     public void hienThiDanhSach() {
-        System.out.println("\n================ DANH SACH NHAN VIEN ================");
-        if (danhSachNhanVien.isEmpty()) {
-            System.out.println("Danh sach trong.");
-            return;
-        }
-        for (int i = 0; i < danhSachNhanVien.size(); i++) {
-            System.out.printf("[%d] %s%n", (i + 1), danhSachNhanVien.get(i));
-        }
+        dsNV.xuatDanhSach();
     }
 
     public void timKiem(String tuKhoa) {
         System.out.println("\n---------------- TIM KIEM NHAN VIEN: " + tuKhoa + " ----------------");
         int dem = 0;
         String tk = tuKhoa.toLowerCase();
-        for (NhanVien nv : danhSachNhanVien) {
+        for (NhanVien nv : dsNV.getDanhSach()) {
             if (nv.getMaNV().toLowerCase().contains(tk) || nv.getHoTen().toLowerCase().contains(tk)) {
                 System.out.println(nv);
                 dem++;

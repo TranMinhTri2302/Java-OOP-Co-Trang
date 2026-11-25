@@ -1,65 +1,35 @@
 package quanly;
 
+import danhsach.DanhSachVe;
 import model.*;
 import tienich.NhapLieu;
 import java.util.ArrayList;
 
-// Lop quan ly danh sach ve va logic kiem tra trang thai ghe ngoi tren tung chuyen bay
+// Lop quan ly nghiep vu va giao dien console ve bay, su dung DanhSachVe de luu tru
 public class QuanLyVe {
-    private ArrayList<Ve> danhSachVe = new ArrayList<Ve>();
+    private DanhSachVe dsVe;
 
-    public ArrayList<Ve> getDanhSachVe() { return danhSachVe; }
-    public int getSoLuong() { return danhSachVe.size(); }
-    public Ve getVe(int index) { return (index >= 0 && index < danhSachVe.size()) ? danhSachVe.get(index) : null; }
-    public void themVe(Ve ve) { if (ve != null && timVe(ve.getMaVe()) == null) danhSachVe.add(ve); }
-
-    public Ve timVe(String maVe) {
-        if (maVe == null) return null;
-        for (Ve v : danhSachVe) {
-            if (maVe.equalsIgnoreCase(v.getMaVe())) return v;
-        }
-        return null;
+    public QuanLyVe() {
+        this.dsVe = new DanhSachVe();
     }
 
-    public boolean xoaVe(String maVe) {
-        Ve v = timVe(maVe);
-        if (v == null) return false;
-        return danhSachVe.remove(v);
+    public QuanLyVe(DanhSachVe dsVe) {
+        this.dsVe = (dsVe != null) ? dsVe : new DanhSachVe();
     }
 
-    public boolean suaVe(String maVe, String hangVeMoi, double giaVeMoi) {
-        Ve v = timVe(maVe);
-        if (v == null) return false;
-        if (hangVeMoi != null && !hangVeMoi.isEmpty()) v.setHangVe(hangVeMoi);
-        if (giaVeMoi > 0) v.setGiaVe(giaVeMoi);
-        return true;
-    }
+    public DanhSachVe getDsVe() { return dsVe; }
+    public ArrayList<Ve> getDanhSachVe() { return dsVe.getDanhSach(); }
+    public int getSoLuong() { return dsVe.getSoLuong(); }
+    public Ve getVe(int index) { return dsVe.getVe(index); }
+    public void themVe(Ve ve) { dsVe.themVe(ve); }
+    public Ve timVe(String maVe) { return dsVe.timVe(maVe); }
+    public boolean xoaVe(String maVe) { return dsVe.xoaVe(maVe); }
+    public boolean suaVe(String maVe, String hangVeMoi, double giaVeMoi) { return dsVe.suaVe(maVe, hangVeMoi, giaVeMoi); }
+    public String sinhMaVe() { return dsVe.sinhMaVe(); }
+    public int demVeHieuLucTheoChuyen(String maCB) { return dsVe.demVeHieuLucTheoChuyen(maCB); }
 
-    public String sinhMaVe() {
-        int max = 0;
-        for (Ve v : danhSachVe) {
-            String ma = v.getMaVe();
-            if (ma != null && ma.toUpperCase().startsWith("VE")) {
-                try {
-                    int num = Integer.parseInt(ma.substring(2).trim());
-                    if (num > max) max = num;
-                } catch (NumberFormatException ignored) {}
-            }
-        }
-        return String.format("VE%03d", max + 1);
-    }
-
-    public int demVeHieuLucTheoChuyen(String maCB) {
-        int d = 0;
-        for (Ve v : danhSachVe) {
-            if (v.getMaCB().equalsIgnoreCase(maCB) && "HIEU_LUC".equalsIgnoreCase(v.getTrangThai())) d++;
-        }
-        return d;
-    }
-
-    // Kiem tra khach da co ve hieu luc tren chuyen bay chua (moi khach toi da 1 ve hieu luc / chuyen bay)
     public boolean kiemTraKhachDaCoVeChuyenBay(String maKH, String maCB, QuanLyHoaDon qlHD) {
-        for (Ve v : danhSachVe) {
+        for (Ve v : dsVe.getDanhSach()) {
             if (v.getMaCB().equalsIgnoreCase(maCB) && "HIEU_LUC".equalsIgnoreCase(v.getTrangThai())) {
                 ChiTietHoaDon ct = qlHD.timChiTietTheoVe(v.getMaVe());
                 if (ct != null && ct.getMaKH().equalsIgnoreCase(maKH)) return true;
@@ -68,13 +38,12 @@ public class QuanLyVe {
         return false;
     }
 
-    // Lay danh sach ghe trong cho mot chuyen bay cu the (danhSachSoGhe cua may bay tru di cac ghe da co ve HIEU_LUC)
     public ArrayList<String> layDanhSachGheTrong(String maCB, MayBay mb) {
         ArrayList<String> res = new ArrayList<String>();
         if (mb == null) return res;
         for (String ghe : mb.getDanhSachSoGhe()) {
             boolean daDat = false;
-            for (Ve v : danhSachVe) {
+            for (Ve v : dsVe.getDanhSach()) {
                 if (v.getMaCB().equalsIgnoreCase(maCB) && "HIEU_LUC".equalsIgnoreCase(v.getTrangThai()) && v.getSoGhe().equalsIgnoreCase(ghe)) {
                     daDat = true;
                     break;
@@ -85,13 +54,11 @@ public class QuanLyVe {
         return res;
     }
 
-    // Xac dinh hang ve theo quy uoc so ghe: hang 1 la THUONG_GIA, tu hang 2 tro di la PHO_THONG
     public String xacDinhHangVe(String soGhe) {
         if (soGhe == null || soGhe.trim().isEmpty()) return "PHO_THONG";
         return soGhe.trim().startsWith("1") ? "THUONG_GIA" : "PHO_THONG";
     }
 
-    // Hien thi va cho phep nguoi dung chon so ghe con trong theo tung khoang ghe
     public String chonGheTrongConsole(String maCB, MayBay mb, String[] gheDaChon, int soLuong) {
         ArrayList<String> trong = layDanhSachGheTrong(maCB, mb);
         ArrayList<String> khaDung = new ArrayList<String>();
@@ -144,24 +111,16 @@ public class QuanLyVe {
     }
 
     public boolean kiemTraMaCBDaDung(String maCB) {
-        for (Ve v : danhSachVe) {
+        for (Ve v : dsVe.getDanhSach()) {
             if (v.getMaCB().equalsIgnoreCase(maCB)) return true;
         }
         return false;
     }
 
     public void hienThiDanhSach() {
-        System.out.println("\n================ DANH SACH VE ================");
-        if (danhSachVe.isEmpty()) {
-            System.out.println("Danh sach trong.");
-            return;
-        }
-        for (int i = 0; i < danhSachVe.size(); i++) {
-            System.out.printf("[%d] %s%n", (i + 1), danhSachVe.get(i));
-        }
+        dsVe.xuatDanhSach();
     }
 
-    // Tra cuu chi tiet ve: tim nguoi bay qua ChiTietHoaDon vi Ve khong co maKH
     public void traCuuChiTietVe(String maVe, QuanLyHoaDon qlHD, QuanLyKhachHang qlKH, QuanLyChuyenBay qlCB) {
         Ve v = timVe(maVe);
         if (v == null) {

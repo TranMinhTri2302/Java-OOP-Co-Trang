@@ -1,40 +1,30 @@
 package quanly;
 
+import danhsach.DanhSachKhachHang;
 import model.KhachHang;
 import tienich.NhapLieu;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-// Lop quan ly danh sach khach hang va cac nghiep vu them, sua, xoa, tim kiem
+// Lop quan ly nghiep vu va giao dien console khach hang, su dung DanhSachKhachHang de luu tru
 public class QuanLyKhachHang {
-    private ArrayList<KhachHang> danhSachKhachHang = new ArrayList<KhachHang>();
+    private DanhSachKhachHang dsKH;
 
-    public ArrayList<KhachHang> getDanhSachKhachHang() { return danhSachKhachHang; }
-    public int getSoLuong() { return danhSachKhachHang.size(); }
-    public KhachHang getKhachHang(int index) { return (index >= 0 && index < danhSachKhachHang.size()) ? danhSachKhachHang.get(index) : null; }
-    public void themKhachHang(KhachHang kh) { if (kh != null && timKhachHang(kh.getMaKH()) == null) danhSachKhachHang.add(kh); }
-
-    public KhachHang timKhachHang(String maKH) {
-        if (maKH == null) return null;
-        for (KhachHang kh : danhSachKhachHang) {
-            if (maKH.equalsIgnoreCase(kh.getMaKH())) return kh;
-        }
-        return null;
+    public QuanLyKhachHang() {
+        this.dsKH = new DanhSachKhachHang();
     }
 
-    // Tra cuu khach hang theo CCCD hoac Ma KH hoac SDT de tai su dung thong tin bao mat
-    public KhachHang timKhachHangTheoCCCDHoacMa(String kw) {
-        if (kw == null || kw.trim().isEmpty()) return null;
-        String k = kw.trim();
-        for (KhachHang kh : danhSachKhachHang) {
-            if (k.equalsIgnoreCase(kh.getMaKH()) ||
-                (kh.getSoCCCD() != null && k.equalsIgnoreCase(kh.getSoCCCD())) ||
-                (kh.getSoDienThoai() != null && k.equalsIgnoreCase(kh.getSoDienThoai()))) {
-                return kh;
-            }
-        }
-        return null;
+    public QuanLyKhachHang(DanhSachKhachHang dsKH) {
+        this.dsKH = (dsKH != null) ? dsKH : new DanhSachKhachHang();
     }
+
+    public DanhSachKhachHang getDsKH() { return dsKH; }
+    public ArrayList<KhachHang> getDanhSachKhachHang() { return dsKH.getDanhSach(); }
+    public int getSoLuong() { return dsKH.getSoLuong(); }
+    public KhachHang getKhachHang(int index) { return dsKH.getKhachHang(index); }
+    public void themKhachHang(KhachHang kh) { dsKH.themKhachHang(kh); }
+    public KhachHang timKhachHang(String maKH) { return dsKH.timKhachHang(maKH); }
+    public KhachHang timKhachHangTheoCCCDHoacMa(String kw) { return dsKH.timTheoCCCDHoacMa(kw); }
 
     public static String kiemTraHopLe(String maKH, String hoTen, LocalDate ngaySinh, String email, String soDienThoai) {
         if (maKH == null || maKH.trim().isEmpty()) return "Ma khach hang khong duoc de trong!";
@@ -46,22 +36,17 @@ public class QuanLyKhachHang {
     }
 
     public boolean suaKhachHang(String maKH, String tenMoi, String sdtMoi) {
-        KhachHang kh = timKhachHang(maKH);
-        if (kh == null) return false;
-        if (tenMoi != null && !tenMoi.isEmpty()) kh.setHoTen(tenMoi);
-        if (sdtMoi != null && !sdtMoi.isEmpty()) kh.setSoDienThoai(sdtMoi);
-        return true;
+        return dsKH.suaKhachHang(maKH, tenMoi, sdtMoi);
     }
 
     public boolean xoaKhachHang(String maKH) {
-        KhachHang kh = timKhachHang(maKH);
-        if (kh == null) {
+        boolean ok = dsKH.xoaKhachHang(maKH);
+        if (ok) {
+            System.out.println("Xoa khach hang " + maKH + " thanh cong!");
+        } else {
             System.out.println("Loi: Khong tim thay ma " + maKH);
-            return false;
         }
-        danhSachKhachHang.remove(kh);
-        System.out.println("Xoa khach hang " + maKH + " thanh cong!");
-        return true;
+        return ok;
     }
 
     public boolean xoaKhachHang(String maKH, QuanLyHoaDon qlHD) {
@@ -69,21 +54,14 @@ public class QuanLyKhachHang {
     }
 
     public void hienThiDanhSach() {
-        System.out.println("\n================ DANH SACH KHACH HANG ================");
-        if (danhSachKhachHang.isEmpty()) {
-            System.out.println("Danh sach trong.");
-            return;
-        }
-        for (int i = 0; i < danhSachKhachHang.size(); i++) {
-            System.out.printf("[%d] %s%n", (i + 1), danhSachKhachHang.get(i));
-        }
+        dsKH.xuatDanhSach();
     }
 
     public void timKiem(String tuKhoa) {
         System.out.println("\n---------------- TIM KIEM NANG CAO (TEN HOAC MA KH): " + tuKhoa + " ----------------");
         int dem = 0;
         String tk = tuKhoa.toLowerCase();
-        for (KhachHang kh : danhSachKhachHang) {
+        for (KhachHang kh : dsKH.getDanhSach()) {
             if (kh.getMaKH().toLowerCase().contains(tk) || kh.getHoTen().toLowerCase().contains(tk)) {
                 System.out.println(kh);
                 dem++;
@@ -92,10 +70,9 @@ public class QuanLyKhachHang {
         if (dem == 0) System.out.println("Khong tim thay ket qua phu hop.");
     }
 
-    // Tim kiem nang cao: loc khach hang co tong tien mua ve tu minTien tro len (vi du: tren 1.000.000 VND)
     public ArrayList<KhachHang> timKhachHangTheoChiTieu(double minTien) {
         ArrayList<KhachHang> kq = new ArrayList<KhachHang>();
-        for (KhachHang kh : danhSachKhachHang) {
+        for (KhachHang kh : dsKH.getDanhSach()) {
             if (kh.getTongTienDaMua() >= minTien) kq.add(kh);
         }
         return kq;
@@ -153,7 +130,6 @@ public class QuanLyKhachHang {
         return kh;
     }
 
-    // Chon khach hang bao mat: khong in toan bo danh sach ma cho phep nhap moi hoac tra cuu CCCD/Ma KH
     public KhachHang chonHoacThemKhachHang(String tieuDe) {
         while (true) {
             System.out.println("\n==================================================");

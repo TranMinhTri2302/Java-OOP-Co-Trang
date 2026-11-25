@@ -54,6 +54,11 @@ public abstract class ChuyenBay {
     // Phuong thuc truu tuong xac dinh loai chuyen bay: NOI_DIA hoac QUOC_TE
     public abstract String getLoaiChuyen();
 
+    // Tinh gia ve: dong bo voi don gia co ban cua chuyen bay (hang ve phan dinh vi tri ghe tren may bay)
+    public double tinhGiaVe(String hangVe) {
+        return this.giaVeCoBan;
+    }
+
     public String getMaCB() { return maCB; }
     public void setMaCB(String maCB) { this.maCB = maCB; }
 

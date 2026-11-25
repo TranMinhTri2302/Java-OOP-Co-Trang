@@ -8,6 +8,7 @@ public class ChuyenBayQuocTe extends ChuyenBay {
     private String quocGiaDen;
     private boolean yeuCauKiemTraVisa;
     private int soThangHieuLucHoChieuToiThieu;
+    private double thueQuocTe = 0.0;
 
     public ChuyenBayQuocTe() {
         super();
@@ -23,6 +24,25 @@ public class ChuyenBayQuocTe extends ChuyenBay {
         this.quocGiaDen = quocGiaDen;
         this.yeuCauKiemTraVisa = yeuCauKiemTraVisa;
         this.soThangHieuLucHoChieuToiThieu = soThangHieuLucHoChieuToiThieu;
+        this.thueQuocTe = 0.0;
+    }
+
+    public ChuyenBayQuocTe(String maCB, String tenChuyenBay, String maMayBay, String maHang,
+                           String maSanBayDi, String maSanBayDen, LocalDate ngayDi, LocalTime GioDi,
+                           LocalDate ngayDen, LocalTime GioDen, double giaVeCoBan, int tongSoVeMoBan,
+                           int soVeDaBan, int soVeConLai, double tongDoanhThu, String trangThai, String ghiChu,
+                           String quocGiaDen, boolean yeuCauKiemTraVisa, int soThangHieuLucHoChieuToiThieu, double thueQuocTe) {
+        super(maCB, tenChuyenBay, maMayBay, maHang, maSanBayDi, maSanBayDen, ngayDi, GioDi, ngayDen, GioDen,
+              giaVeCoBan, tongSoVeMoBan, soVeDaBan, soVeConLai, tongDoanhThu, trangThai, ghiChu);
+        this.quocGiaDen = quocGiaDen;
+        this.yeuCauKiemTraVisa = yeuCauKiemTraVisa;
+        this.soThangHieuLucHoChieuToiThieu = soThangHieuLucHoChieuToiThieu;
+        this.thueQuocTe = thueQuocTe;
+    }
+
+    @Override
+    public double tinhGiaVe(String hangVe) {
+        return super.tinhGiaVe(hangVe);
     }
 
     @Override
@@ -62,6 +82,9 @@ public class ChuyenBayQuocTe extends ChuyenBay {
 
     public int getSoThangHieuLucHoChieuToiThieu() { return soThangHieuLucHoChieuToiThieu; }
     public void setSoThangHieuLucHoChieuToiThieu(int soThangHieuLucHoChieuToiThieu) { this.soThangHieuLucHoChieuToiThieu = soThangHieuLucHoChieuToiThieu; }
+
+    public double getThueQuocTe() { return thueQuocTe; }
+    public void setThueQuocTe(double thueQuocTe) { this.thueQuocTe = thueQuocTe; }
 
     @Override
     public String toString() {

@@ -1,0 +1,15 @@
+{
+    "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx8G -Xms100m -Xlog:disable",
+    "typingEffect.pasteShortcut": "ctrl+1",
+    "editor.inlineSuggest.enabled": false,
+    "editor.suggest.preview": false,
+    "editor.snippetSuggestions": "top",
+    "editor.quickSuggestions": {
+        "other": "on",
+        "comments": "off",
+        "strings": "off"
+    },
+    "editor.suggestOnTriggerCharacters": false,
+    "editor.parameterHints.enabled": false,
+    "editor.wordBasedSuggestions": "off"
+}

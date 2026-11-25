@@ -1,5 +1,6 @@
 package quanly;
 
+import danhsach.DanhSachHoaDon;
 import model.*;
 import tienich.NhapLieu;
 import java.io.*;
@@ -10,74 +11,56 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-// Lop quan ly danh sach hoa don, chi tiet hoa don, huy hoa don va xuat file
+// Lop quan ly nghiep vu va giao dien console hoa don, su dung DanhSachHoaDon de luu tru
 public class QuanLyHoaDon {
-    private ArrayList<HoaDon> danhSachHoaDon = new ArrayList<HoaDon>();
-    private ArrayList<ChiTietHoaDon> danhSachChiTiet = new ArrayList<ChiTietHoaDon>();
+    private DanhSachHoaDon dsHD;
 
-    public ArrayList<HoaDon> getDanhSachHoaDon() { return danhSachHoaDon; }
-    public ArrayList<ChiTietHoaDon> getDanhSachChiTiet() { return danhSachChiTiet; }
-    public int getSoLuong() { return danhSachHoaDon.size(); }
-    public HoaDon getHoaDon(int index) { return (index >= 0 && index < danhSachHoaDon.size()) ? danhSachHoaDon.get(index) : null; }
-
-    public void themHoaDon(HoaDon hd) { if (hd != null && timHoaDon(hd.getMaHD()) == null) danhSachHoaDon.add(hd); }
-    public void themChiTiet(ChiTietHoaDon ct) { if (ct != null) danhSachChiTiet.add(ct); }
-
-    public HoaDon timHoaDon(String maHD) {
-        if (maHD == null) return null;
-        for (HoaDon hd : danhSachHoaDon) if (maHD.equalsIgnoreCase(hd.getMaHD())) return hd;
-        return null;
+    public QuanLyHoaDon() {
+        this.dsHD = new DanhSachHoaDon();
     }
 
-    public ChiTietHoaDon timChiTietTheoVe(String maVe) {
-        if (maVe == null) return null;
-        for (ChiTietHoaDon ct : danhSachChiTiet) if (maVe.equalsIgnoreCase(ct.getMaVe())) return ct;
-        return null;
+    public QuanLyHoaDon(DanhSachHoaDon dsHD) {
+        this.dsHD = (dsHD != null) ? dsHD : new DanhSachHoaDon();
     }
 
-    public String sinhMaHD() {
-        int max = 0;
-        for (HoaDon hd : danhSachHoaDon) {
-            String ma = hd.getMaHD();
-            if (ma != null && ma.toUpperCase().startsWith("HD")) {
-                try {
-                    int num = Integer.parseInt(ma.substring(2).trim());
-                    if (num > max) max = num;
-                } catch (NumberFormatException ignored) {}
-            }
-        }
-        return String.format("HD%03d", max + 1);
-    }
+    public DanhSachHoaDon getDsHD() { return dsHD; }
+    public ArrayList<HoaDon> getDanhSachHoaDon() { return dsHD.getDanhSachHoaDon(); }
+    public ArrayList<ChiTietHoaDon> getDanhSachChiTiet() { return dsHD.getDanhSachChiTiet(); }
+    public int getSoLuong() { return dsHD.getSoLuong(); }
+    public HoaDon getHoaDon(int index) { return dsHD.getHoaDon(index); }
 
-    public boolean kiemTraMaKHDaDung(String maKH) {
-        for (HoaDon hd : danhSachHoaDon) if (hd.getMaKH().equalsIgnoreCase(maKH)) return true;
-        for (ChiTietHoaDon ct : danhSachChiTiet) if (ct.getMaKH().equalsIgnoreCase(maKH)) return true;
-        return false;
-    }
+    public void themHoaDon(HoaDon hd) { dsHD.themHoaDon(hd); }
+    public void themChiTiet(ChiTietHoaDon ct) { dsHD.themChiTiet(ct); }
+    public HoaDon timHoaDon(String maHD) { return dsHD.timHoaDon(maHD); }
+    public ChiTietHoaDon timChiTietTheoVe(String maVe) { return dsHD.timChiTietTheoVe(maVe); }
+    public String sinhMaHD() { return dsHD.sinhMaHD(); }
 
-    public boolean kiemTraMaNVDaDung(String maNV) {
-        for (HoaDon hd : danhSachHoaDon) if (hd.getMaNV().equalsIgnoreCase(maNV)) return true;
-        return false;
-    }
+    public boolean kiemTraMaKHDaDung(String maKH) { return dsHD.kiemTraMaKHDaDung(maKH); }
+    public boolean kiemTraMaNVDaDung(String maNV) { return dsHD.kiemTraMaNVDaDung(maNV); }
+    public boolean kiemTraMaCBDaDung(String maCB) { return dsHD.kiemTraMaCBDaDung(maCB); }
 
-    public boolean kiemTraMaCBDaDung(String maCB) {
-        for (HoaDon hd : danhSachHoaDon) if (hd.getMaCB().equalsIgnoreCase(maCB)) return true;
-        return false;
-    }
+    public double tinhDoanhThuChuyenBay(String maCB) { return dsHD.tinhDoanhThuChuyenBay(maCB); }
+    public int tinhSoVeKhachMua(String maKH) { return dsHD.tinhSoVeKhachMua(maKH); }
+    public double tinhTienKhachMua(String maKH) { return dsHD.tinhTienKhachMua(maKH); }
+    public int demTongHoaDonNhanVien(String maNV) { return dsHD.demTongHoaDonNhanVien(maNV); }
+    public int tinhSoVeNhanVienBan(String maNV) { return dsHD.tinhSoVeNhanVienBan(maNV); }
+    public double tinhTienNhanVienBan(String maNV) { return dsHD.tinhTienNhanVienBan(maNV); }
 
     // Nghiep vu huy hoa don: chuyen trang thai HoaDon va cac Ve lien quan thanh DA_HUY
     // Giai phong ghe de khach khac co the dat
     public boolean huyHoaDon(String maHD, QuanLyChuyenBay qlCB, QuanLyVe qlVe) {
         HoaDon hd = timHoaDon(maHD);
         if (hd == null || !"HIEU_LUC".equalsIgnoreCase(hd.getTrangThai())) {
-            System.out.println("Loi: Khong tim thay hoa don hoac hoa don khong o trang thai HIEU_LUC!"); return false;
+            System.out.println("Loi: Khong tim thay hoa don hoac hoa don khong o trang thai HIEU_LUC!");
+            return false;
         }
         ChuyenBay cb = qlCB.timChuyenBay(hd.getMaCB());
         if (cb != null && !LocalDateTime.of(cb.getNgayDi(), cb.getGioDi()).isAfter(LocalDateTime.now())) {
-            System.out.println("Loi: Chuyen bay da khoi hanh, khong the huy hoa don!"); return false;
+            System.out.println("Loi: Chuyen bay da khoi hanh, khong the huy hoa don!");
+            return false;
         }
         hd.setTrangThai("DA_HUY");
-        for (ChiTietHoaDon ct : danhSachChiTiet) {
+        for (ChiTietHoaDon ct : dsHD.getDanhSachChiTiet()) {
             if (ct.getMaHD().equalsIgnoreCase(maHD)) {
                 Ve v = qlVe.timVe(ct.getMaVe());
                 if (v != null) v.setTrangThai("DA_HUY");
@@ -87,43 +70,29 @@ public class QuanLyHoaDon {
         return true;
     }
 
-    public double tinhDoanhThuChuyenBay(String maCB) {
-        double t = 0; for (HoaDon h : danhSachHoaDon) if (h.getMaCB().equalsIgnoreCase(maCB) && "HIEU_LUC".equalsIgnoreCase(h.getTrangThai())) t += h.getTongTien();
-        return t;
-    }
-    public int tinhSoVeKhachMua(String maKH) {
-        int t = 0; for (HoaDon h : danhSachHoaDon) if (h.getMaKH().equalsIgnoreCase(maKH) && "HIEU_LUC".equalsIgnoreCase(h.getTrangThai())) t += h.getSoLuongVe();
-        return t;
-    }
-    public double tinhTienKhachMua(String maKH) {
-        double t = 0; for (HoaDon h : danhSachHoaDon) if (h.getMaKH().equalsIgnoreCase(maKH) && "HIEU_LUC".equalsIgnoreCase(h.getTrangThai())) t += h.getTongTien();
-        return t;
-    }
-    public int demTongHoaDonNhanVien(String maNV) {
-        int d = 0; for (HoaDon h : danhSachHoaDon) if (h.getMaNV().equalsIgnoreCase(maNV)) d++;
-        return d;
-    }
-    public int tinhSoVeNhanVienBan(String maNV) {
-        int t = 0; for (HoaDon h : danhSachHoaDon) if (h.getMaNV().equalsIgnoreCase(maNV) && "HIEU_LUC".equalsIgnoreCase(h.getTrangThai())) t += h.getSoLuongVe();
-        return t;
-    }
-    public double tinhTienNhanVienBan(String maNV) {
-        double t = 0; for (HoaDon h : danhSachHoaDon) if (h.getMaNV().equalsIgnoreCase(maNV) && "HIEU_LUC".equalsIgnoreCase(h.getTrangThai())) t += h.getTongTien();
-        return t;
+    // Chuyen toan bo luong giao dien xu ly huy hoa don vao dung QuanLyHoaDon theo yeu cau cua co
+    public boolean xuLyHuyHoaDon(QuanLyChuyenBay qlCB, QuanLyVe qlVe) {
+        System.out.println("\n==================================================");
+        System.out.println("                  HUY HOA DON");
+        System.out.println("==================================================");
+        String maHD = NhapLieu.nhapChuoi("Nhap ma hoa don can huy");
+        return huyHoaDon(maHD, qlCB, qlVe);
     }
 
     // Thong ke chi tiet hoa don va tong doanh thu thuc te su dung interface ThongKe
     public void thongKeChiTietHoaDon() {
         System.out.println("\n================ DANH SACH CHI TIET CAC HOA DON ================");
-        if (danhSachChiTiet.isEmpty()) {
+        if (dsHD.getDanhSachChiTiet().isEmpty()) {
             System.out.println("Chua co chi tiet hoa don nao.");
         } else {
-            for (int i = 0; i < danhSachChiTiet.size(); i++) {
-                System.out.printf("[%d] %s%n", (i + 1), danhSachChiTiet.get(i));
+            for (int i = 0; i < dsHD.getDanhSachChiTiet().size(); i++) {
+                System.out.printf("[%d] %s%n", (i + 1), dsHD.getDanhSachChiTiet().get(i));
             }
         }
-        int demHieuLuc = 0; double tongTien = 0; int tongVe = 0;
-        for (HoaDon hd : danhSachHoaDon) {
+        int demHieuLuc = 0;
+        double tongTien = 0;
+        int tongVe = 0;
+        for (HoaDon hd : dsHD.getDanhSachHoaDon()) {
             if ("HIEU_LUC".equalsIgnoreCase(hd.getTrangThai())) {
                 demHieuLuc++;
                 tongVe += hd.getSoLuongVe();
@@ -139,15 +108,9 @@ public class QuanLyHoaDon {
         System.out.println("==================================================================================================");
     }
 
-    // Tim kiem nang cao: loc hoa don theo khoang tien (vi du: tren 1.000.000 VND)
+    // Tim kiem nang cao: loc hoa don theo khoang tien
     public ArrayList<HoaDon> timHoaDonTheoKhoangTien(double minTien, double maxTien) {
-        ArrayList<HoaDon> kq = new ArrayList<HoaDon>();
-        for (HoaDon hd : danhSachHoaDon) {
-            if (hd.getTongTien() >= minTien && hd.getTongTien() <= maxTien && "HIEU_LUC".equalsIgnoreCase(hd.getTrangThai())) {
-                kq.add(hd);
-            }
-        }
-        return kq;
+        return dsHD.timHoaDonTheoKhoangTien(minTien, maxTien);
     }
 
     public void traCuuTheoKhoangTienConsole(double minTien, double maxTien) {
@@ -163,41 +126,132 @@ public class QuanLyHoaDon {
     public void traCuuTheoKhachMua(String maKH) {
         System.out.println("\n---------------- HOA DON CUA KHACH HANG: " + maKH + " ----------------");
         int dem = 0;
-        for (HoaDon hd : danhSachHoaDon) if (hd.getMaKH().equalsIgnoreCase(maKH)) { System.out.println(hd); dem++; }
+        for (HoaDon hd : dsHD.getDanhSachHoaDon()) {
+            if (hd.getMaKH().equalsIgnoreCase(maKH)) {
+                System.out.println(hd);
+                dem++;
+            }
+        }
         if (dem == 0) System.out.println("Khong tim thay hoa don nao.");
     }
 
-    // Ham lap hoa don cot loi danh cho live-code (dung 7 dong)
-    public boolean lapHoaDon(String maHD, String maKH, String maNV, ChuyenBay cb, int sl) {
-        if (cb == null || cb.getSoVeConLai() < sl || timHoaDon(maHD) != null) return false;
-        double tien = cb.getGiaVeCoBan() * sl;
-        themHoaDon(new HoaDon(maHD, maKH, maNV, cb.getMaCB(), LocalDateTime.now(), sl, tien, "TIEN_MAT", "HIEU_LUC"));
-        cb.setSoVeDaBan(cb.getSoVeDaBan() + sl);
-        cb.setSoVeConLai(cb.getTongSoVeMoBan() - cb.getSoVeDaBan());
-        return true;
+    // Tinh tong doanh thu 3 nam gan nhat qua interface ThongKe
+    public double tinhTongDoanhThu3Nam(int namHienTai) {
+        return dsHD.tinhTongDoanhThu3NamGanNhat(namHienTai);
     }
 
-    // Menu them 1 hoa don moi viet truc tiep trong class QuanLyHoaDon theo dung yeu cau:
-    // Su dung toan bo bien cuc bo: nhap ma hd, ma kh, ngay lap, gan tong tien = 0,
-    // hoi so luong chi tiet hoa don, lap qua tung chi tiet de nhap san pham va so luong,
-    // getDonGia tu danh sach san pham (QuanLyChuyenBay), tinh thanh tien, cong don tong tien,
-    // them cthdon vao danhSachChiTiet va cap nhat thay doi so luong cua danh sach san pham.
-    // Chuc nang danh cho nhan vien ban ve lap hoa don truc tiep tai quay theo dung mau co giao:
-    // Su dung toan bo bien cuc bo: nhan vien truc ca, nhap ma hd, nhap ma kh, nhap ngay lap, gan tong tien = 0,
-    // hoi so luong chi tiet hoa don, vong lap: nhap ma san pham (ma chuyen bay), so luong,
-    // getDonGia tu danh sach san pham (QuanLyChuyenBay), tinh thanh tien, cong don tong tien,
-    // them cthdon vao danhSachChiTiet va cap nhat thay doi so luong cua danh sach san pham.
+    // Thong ke doanh thu 3 nam gan nhat co day du ngay thang theo dung cau hoi van dap cua co
+    public void thongKeDoanhThu3NamGanNhatConsole(int namHienTai) {
+        System.out.println("\n================ THONG KE DOANH THU 3 NAM GAN NHAT (" + (namHienTai - 2) + " - " + namHienTai + ") ================");
+        int namBatDau = namHienTai - 2;
+        double tong3Nam = 0;
+        int tongVe3Nam = 0;
+        int tongHD3Nam = 0;
+
+        for (int y = namBatDau; y <= namHienTai; y++) {
+            double tongNam = 0;
+            int soHDNam = 0;
+            int soVeNam = 0;
+            System.out.println("\n--- NAM " + y + " ---");
+            boolean coDuLieu = false;
+            for (HoaDon hd : dsHD.getDanhSachHoaDon()) {
+                if ("HIEU_LUC".equalsIgnoreCase(hd.getTrangThai()) && hd.getNgayLap() != null && hd.getNgayLap().getYear() == y) {
+                    coDuLieu = true;
+                    soHDNam++;
+                    soVeNam += hd.getSoLuongVe();
+                    ThongKe tk = hd;
+                    tongNam += tk.tinhTongTien();
+                    System.out.printf("  HD: %-8s | Ngay lap: %s | Chuyen: %-6s | Ve: %-2d | Tien: %,.0f VND%n",
+                            hd.getMaHD(), NhapLieu.dinhDangThoiGian(hd.getNgayLap()), hd.getMaCB(), hd.getSoLuongVe(), hd.getTongTien());
+                }
+            }
+            if (!coDuLieu) {
+                System.out.println("  (Khong co hoa don nao trong nam " + y + ")");
+            } else {
+                System.out.printf("  => Tong nam %d: %d hoa don | %d ve | Doanh thu: %,.0f VND%n", y, soHDNam, soVeNam, tongNam);
+            }
+            tong3Nam += tongNam;
+            tongVe3Nam += soVeNam;
+            tongHD3Nam += soHDNam;
+        }
+        System.out.println("--------------------------------------------------------------------------------------------------");
+        System.out.printf("TONG CONG 3 NAM (%d - %d): %d hoa don | %d ve | %,.0f VND (tinh qua ThongKe)%n",
+                namBatDau, namHienTai, tongHD3Nam, tongVe3Nam, tong3Nam);
+        System.out.println("==================================================================================================");
+    }
+
+    // Menu tra cuu thong tin hoa don va ve
+    public void menuTraCuu(QuanLyVe qlVe, QuanLyKhachHang qlKH, QuanLyChuyenBay qlCB) {
+        while (true) {
+            System.out.println("\n==================================================");
+            System.out.println("                TRA CUU THONG TIN");
+            System.out.println("==================================================");
+            System.out.println("1. Tra cuu chi tiet ve theo ma ve");
+            System.out.println("2. Tra cuu hoa don theo ma hoa don");
+            System.out.println("3. Tra cuu hoa don theo ma khach hang mua");
+            System.out.println("4. Tim kiem nang cao hoa don theo khoang tien");
+            System.out.println("0. Quay lai menu chinh");
+            System.out.println("==================================================");
+            int c = NhapLieu.nhapSoNguyen("Lua chon cua ban", 0, 4);
+            if (c == 0) break;
+            if (c == 1) qlVe.traCuuChiTietVe(NhapLieu.nhapChuoi("Nhap ma ve"), this, qlKH, qlCB);
+            else if (c == 2) {
+                HoaDon hd = timHoaDon(NhapLieu.nhapChuoi("Nhap ma hoa don"));
+                System.out.println(hd != null ? hd : "Khong tim thay hoa don!");
+            } else if (c == 3) traCuuTheoKhachMua(NhapLieu.nhapChuoi("Nhap ma khach hang"));
+            else if (c == 4) {
+                double min = NhapLieu.nhapSoThuc("Nhap so tien toi thieu (vi du: 1000000)", 0, 1000000000);
+                double max = NhapLieu.nhapSoThuc("Nhap so tien toi da (vi du: 100000000)", min, 1000000000);
+                traCuuTheoKhoangTienConsole(min, max);
+            }
+        }
+    }
+
+    // Menu thong ke va bao cao
+    public void menuThongKe(QuanLyChuyenBay qlCB, QuanLyNhanVien qlNV) {
+        while (true) {
+            System.out.println("\n==================================================");
+            System.out.println("                THONG KE & BAO CAO");
+            System.out.println("==================================================");
+            System.out.println("1. Thong ke doanh thu theo chuyen bay (san pham)");
+            System.out.println("2. Thong ke chi tiet hoa don & tong doanh thu (ThongKe)");
+            System.out.println("3. Thong ke doanh thu 3 nam gan nhat (co ngay thang)");
+            System.out.println("0. Quay lai menu chinh");
+            System.out.println("==================================================");
+            int c = NhapLieu.nhapSoNguyen("Lua chon cua ban", 0, 3);
+            if (c == 0) break;
+            if (c == 1) {
+                System.out.println("\n================ DOANH THU THEO CHUYEN BAY ================");
+                for (int i = 0; i < qlCB.getSoLuong(); i++) {
+                    ChuyenBay cb = qlCB.getChuyenBay(i);
+                    System.out.printf("%-8s | %-20s | Ban: %-2d | Con: %-2d | Doanh thu: %,.0f VND%n",
+                            cb.getMaCB(), cb.getTenChuyenBay(), cb.getSoVeDaBan(), cb.getSoVeConLai(), cb.getTongDoanhThu());
+                }
+            } else if (c == 2) {
+                thongKeChiTietHoaDon();
+                System.out.println("\n--- DOANH SO NHAN VIEN SALE ---");
+                for (int i = 0; i < qlNV.getSoLuong(); i++) {
+                    NhanVien nv = qlNV.getNhanVien(i);
+                    System.out.printf("%-8s | %-20s | HD: %-2d | Ve: %-2d | Doanh so: %,.0f VND%n",
+                            nv.getMaNV(), nv.getHoTen(), nv.getTongSoHoaDonDaLap(), nv.getTongSoVeDaBan(), nv.getTongTienDaBan());
+                }
+            } else if (c == 3) {
+                int nam = NhapLieu.nhapSoNguyen("Nhap nam can thong ke (vi du: 2026)", 2000, 2100);
+                thongKeDoanhThu3NamGanNhatConsole(nam);
+            }
+        }
+    }
+
+    // Ham lap hoa don co ban tai quay theo yeu cau cua co
     public boolean themHoaDonTheoMauChung(QuanLyKhachHang qlKH, QuanLyNhanVien qlNV, QuanLyChuyenBay qlCB, QuanLyVe qlVe) {
         System.out.println("\n==================================================");
         System.out.println("     LAP HOA DON BAN VE TAI QUAY (NHAN VIEN)");
         System.out.println("==================================================");
 
-        // Nhan vien truc ca chiu trach nhiem lap hoa don (bien cuc bo)
         NhanVien nv = qlNV.chonNhanVienLapHoaDon();
         if (nv == null) return false;
         String maNV = nv.getMaNV();
 
-        // 1. Nhap ma hd (bien cuc bo)
         String maHDMacDinh = sinhMaHD();
         String maHD = NhapLieu.nhapChuoiCoTheRong("Nhap ma hoa don (Enter de lay tu dong: " + maHDMacDinh + ")");
         if (maHD.isEmpty()) maHD = maHDMacDinh;
@@ -206,7 +260,6 @@ public class QuanLyHoaDon {
             maHD = NhapLieu.nhapChuoi("Nhap lai ma hoa don");
         }
 
-        // 2. Nhap ma kh (bien cuc bo)
         String maKH;
         while (true) {
             maKH = NhapLieu.nhapChuoi("Nhap ma khach hang (vi du: KH01)");
@@ -214,15 +267,12 @@ public class QuanLyHoaDon {
             System.out.println("Loi: Khach hang " + maKH + " chua ton tai! Vui long nhap ma KH hop le.");
         }
 
-        // 3. Nhap ngay lap (bien cuc bo)
         LocalDate d = NhapLieu.nhapNgayCoTheRong("Nhap ngay lap hoa don");
         LocalDateTime ngayLap = (d != null) ? d.atTime(LocalTime.now().getHour(), LocalTime.now().getMinute()) : LocalDateTime.now();
 
-        // 4. Gan tong tien = 0 (bien cuc bo)
         double tongTien = 0.0;
         int tongSoVe = 0;
 
-        // 5. Roi moi hoi la nhap so luong chi tiet hoa don (bien cuc bo)
         int soLuongChiTiet = NhapLieu.nhapSoNguyen("Nhap so luong chi tiet hoa don", 1, 50);
 
         String maCBLuu = "";
@@ -240,21 +290,16 @@ public class QuanLyHoaDon {
             int soLuong = NhapLieu.nhapSoNguyen("Nhap so luong", 1, sp.getSoVeConLai());
             tongSoVe += soLuong;
 
-            // getDonGia tu danh sach san pham (QuanLyChuyenBay)
             double donGia = sp.getGiaVeCoBan();
-
-            // Tinh thanh tien
             double thanhTien = donGia * soLuong;
-
-            // Cong don tong tien
             tongTien += thanhTien;
 
-            // Tao ma ve va them cthdon vao danh sach chi tiet hoa don
-            String maVe = qlVe.sinhMaVe();
-            qlVe.themVe(new Ve(maVe, sp.getMaCB(), "AUTO-" + i, "PHO_THONG", "THUONG", donGia, "HIEU_LUC"));
-            this.themChiTiet(new ChiTietHoaDon(maHD, maVe, maKH, "THUONG", donGia, soLuong, thanhTien));
+            for (int s = 1; s <= soLuong; s++) {
+                String maVe = qlVe.sinhMaVe();
+                qlVe.themVe(new Ve(maVe, sp.getMaCB(), "A" + i + "-" + s, "PHO_THONG", "THUONG", donGia, "HIEU_LUC"));
+                this.themChiTiet(new ChiTietHoaDon(maHD, maVe, maKH, "THUONG", donGia, 1, donGia));
+            }
 
-            // Cap nhat va thay doi so luong cua danh sach san pham
             sp.setSoVeDaBan(sp.getSoVeDaBan() + soLuong);
             sp.setSoVeConLai(sp.getTongSoVeMoBan() - sp.getSoVeDaBan());
 
@@ -262,7 +307,6 @@ public class QuanLyHoaDon {
                     sp.getMaCB(), donGia, soLuong, thanhTien);
         }
 
-        // Them hoa don vao danhSachHoaDon
         this.themHoaDon(new HoaDon(maHD, maKH, maNV, maCBLuu, ngayLap, tongSoVe, tongTien, "TIEN_MAT", "HIEU_LUC"));
         System.out.println("\nTHEM HOA DON THEO MAU THANH CONG!");
         System.out.printf("Ma HD: %s | Ma KH: %s | NV: %s | So luong chi tiet: %d | Tong so ve: %d | Tong tien: %,.0f VND%n",
@@ -298,7 +342,7 @@ public class QuanLyHoaDon {
                   + "------------------------------------------------------------------------\r\n");
 
             int stt = 1;
-            for (ChiTietHoaDon ct : danhSachChiTiet) {
+            for (ChiTietHoaDon ct : dsHD.getDanhSachChiTiet()) {
                 if (ct.getMaHD().equalsIgnoreCase(maHD)) {
                     Ve v = qlVe.timVe(ct.getMaVe());
                     KhachHang p = qlKH.timKhachHang(ct.getMaKH());
@@ -313,6 +357,9 @@ public class QuanLyHoaDon {
             w.close();
             System.out.println("Xuat hoa don thanh cong ra file: " + filePath);
             return true;
-        } catch (Exception e) { System.out.println("Loi xuat hoa don: " + e.getMessage()); return false; }
+        } catch (Exception e) {
+            System.out.println("Loi xuat hoa don: " + e.getMessage());
+            return false;
+        }
     }
 }
